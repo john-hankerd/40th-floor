@@ -1,0 +1,6 @@
+{
+  "name": "40thfloor-functions",
+  "version": "1.0.0",
+  "description": "Netlify serverless functions for 40th Floor",
+  "dependencies": {}
+}
