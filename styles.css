@@ -238,6 +238,19 @@ h1, h2, h3 { line-height: 1.2; margin: 0 0 12px; }
   width: 100%;
 }
 
+.app-secondary-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.app-secondary-link:hover {
+  color: var(--gold);
+}
+
 /* About */
 .about {
   padding: 84px 0;

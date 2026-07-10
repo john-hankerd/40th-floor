@@ -2,6 +2,18 @@
   publish = "."
   functions = "netlify/functions"
 
+[[redirects]]
+  from = "/mark-it-done"
+  to = "https://mark-it-done-600.netlify.app/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/mark-it-done/*"
+  to = "https://mark-it-done-600.netlify.app/:splat"
+  status = 200
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
