@@ -4,7 +4,7 @@
 
 [[redirects]]
   from = "/mark-it-done"
-  to = "https://mark-it-done-600.netlify.app/:splat"
+  to = "https://mark-it-done-600.netlify.app/"
   status = 200
   force = true
 
