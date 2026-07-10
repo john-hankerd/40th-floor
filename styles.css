@@ -233,6 +233,12 @@ h1, h2, h3 { line-height: 1.2; margin: 0 0 12px; }
   color: var(--gold);
 }
 
+.app-note {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: -10px 0 14px;
+}
+
 .app-cta {
   text-align: center;
   width: 100%;
