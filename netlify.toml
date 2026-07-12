@@ -15,13 +15,13 @@
   force = true
 
 [[redirects]]
-  from = "/tapin"
+  from = "/scannow"
   to = "https://scannow-100.netlify.app/"
   status = 200
   force = true
 
 [[redirects]]
-  from = "/tapin/*"
+  from = "/scannow/*"
   to = "https://scannow-100.netlify.app/:splat"
   status = 200
   force = true
