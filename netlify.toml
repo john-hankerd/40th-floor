@@ -15,15 +15,15 @@
   force = true
 
 [[redirects]]
-  from = "/scannow"
-  to = "/scannow/"
-  status = 301
-  force = true
-
-[[redirects]]
   from = "/scannow/*"
   to = "https://scannow-100.netlify.app/:splat"
   status = 200
+  force = true
+
+[[redirects]]
+  from = "/scannow"
+  to = "/scannow/"
+  status = 301
   force = true
 
 [[headers]]
