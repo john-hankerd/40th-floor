@@ -16,8 +16,8 @@
 
 [[redirects]]
   from = "/scannow"
-  to = "https://scannow-100.netlify.app/"
-  status = 200
+  to = "/scannow/"
+  status = 301
   force = true
 
 [[redirects]]
