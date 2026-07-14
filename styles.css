@@ -233,6 +233,11 @@ h1, h2, h3 { line-height: 1.2; margin: 0 0 12px; }
   color: var(--gold);
 }
 
+.status-testing {
+  background: rgba(232, 182, 76, 0.12);
+  color: var(--gold);
+}
+
 .app-note {
   font-size: 12px;
   color: var(--text-dim);
