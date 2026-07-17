@@ -38,6 +38,18 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "/invoicing/*"
+  to = "https://invoice-estimate-builder.netlify.app/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/invoicing"
+  to = "/invoicing/"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
