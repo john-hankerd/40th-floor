@@ -50,6 +50,18 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "/answersoffaith/*"
+  to = "https://answers-of-faith.netlify.app/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/answersoffaith"
+  to = "/answersoffaith/"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
