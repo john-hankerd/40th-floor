@@ -5,7 +5,7 @@
 
 const https = require("https");
 
-const NOTIFY_EMAIL = process.env.WAITLIST_NOTIFY_EMAIL || "john.hankerd@gmail.com";
+const NOTIFY_EMAIL = process.env.WAITLIST_NOTIFY_EMAIL || "40thFloorinfo@gmail.com";
 const FROM_EMAIL = process.env.WAITLIST_FROM_EMAIL || "40th Floor <onboarding@resend.dev>";
 
 function httpsRequest(options, body) {
