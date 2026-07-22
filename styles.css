@@ -335,6 +335,26 @@ h1, h2, h3 { line-height: 1.2; margin: 0 0 12px; }
   margin: 0 auto 34px;
 }
 
+.landing-shot {
+  max-width: 640px;
+  margin: 40px auto 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--navy-border);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  background: var(--navy-800);
+}
+
+.landing-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.landing-shot-phone {
+  max-width: 300px;
+}
+
 .landing-features {
   padding: 72px 0;
   border-top: 1px solid var(--navy-border);
