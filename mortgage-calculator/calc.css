@@ -1,0 +1,377 @@
+/* Mortgage calculator widget — extends the shared theme variables from /styles.css */
+
+.calc-section {
+  padding: 0 0 72px;
+}
+
+.calc-widget {
+  max-width: 640px;
+  margin: 0 auto;
+  background: #f7f5f2;
+  color: #1a1a2e;
+  border-radius: var(--radius);
+  border: 1px solid var(--navy-border);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.calc-progress {
+  display: flex;
+  gap: 6px;
+  padding: 20px 28px 0;
+}
+
+.calc-progress-dot {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: #e3ddd2;
+}
+
+.calc-progress-dot.done { background: var(--gold-dim); }
+.calc-progress-dot.current { background: var(--gold); }
+
+.calc-body {
+  padding: 28px 28px 32px;
+}
+
+.calc-eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9a8f7a;
+  margin-bottom: 8px;
+}
+
+.calc-question {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 18px;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.calc-input-large {
+  width: 100%;
+  font-size: 24px;
+  font-weight: 700;
+  padding: 16px 18px;
+  border-radius: 10px;
+  border: 1.5px solid #ddd5c5;
+  background: #fff;
+  color: #1a1a2e;
+}
+
+.calc-input-large:focus,
+.calc-input:focus { outline: none; border-color: var(--gold-dim); }
+
+.calc-input {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd5c5;
+  background: #fff;
+  color: #1a1a2e;
+}
+
+.calc-hint {
+  font-size: 13px;
+  color: #857a68;
+  margin-top: 8px;
+}
+
+.calc-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 14px;
+  color: #5a5347;
+}
+
+.calc-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.calc-options.calc-options-wide { grid-template-columns: 1fr; }
+
+.calc-option-btn {
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1.5px solid #ddd5c5;
+  background: #fff;
+  color: #1a1a2e;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+
+.calc-option-btn:hover { border-color: var(--gold-dim); }
+
+.calc-option-btn.selected {
+  border-color: var(--gold-dim);
+  background: #fff8ea;
+  color: #8a6416;
+}
+
+.calc-option-sub {
+  display: block;
+  font-weight: 400;
+  font-size: 12px;
+  color: #9a8f7a;
+  margin-top: 2px;
+}
+
+.calc-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.calc-btn {
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.calc-btn-primary { background: var(--gold); color: #1a1a2e; }
+.calc-btn-primary:hover { background: #f0c363; }
+.calc-btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.calc-btn-back {
+  background: none;
+  color: #857a68;
+  font-weight: 600;
+  padding: 12px 8px;
+}
+
+.calc-btn-back:hover { color: #1a1a2e; }
+
+/* Results */
+.calc-results-head {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.calc-results-head p { color: #857a68; font-size: 14px; margin: 4px 0 0; }
+
+.calc-result-card {
+  background: #fff;
+  border: 1.5px solid #ddd5c5;
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+
+.calc-result-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #857a68;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.calc-result-value {
+  font-size: 34px;
+  font-weight: 800;
+  font-family: Georgia, "Times New Roman", serif;
+  color: #1a1a2e;
+  margin: 4px 0 8px;
+}
+
+.calc-result-includes {
+  font-size: 13px;
+  color: #857a68;
+  line-height: 1.5;
+}
+
+.calc-breakdown-toggle {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1.5px dashed #ddd5c5;
+  background: transparent;
+  color: #8a6416;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.calc-breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.calc-breakdown-table td {
+  padding: 8px 4px;
+  border-bottom: 1px solid #ece6d9;
+}
+
+.calc-breakdown-table td:last-child { text-align: right; font-weight: 700; }
+
+.calc-breakdown-table tr.calc-editable td:first-child { color: #5a5347; }
+
+.calc-edit-input {
+  width: 90px;
+  text-align: right;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd5c5;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.calc-estimate-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold-dim);
+  background: #fff3dc;
+  border-radius: 999px;
+  padding: 1px 8px;
+  margin-left: 6px;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+.calc-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.calc-actions .calc-btn {
+  flex: 1;
+  background: #fff;
+  border: 1.5px solid #ddd5c5;
+  color: #1a1a2e;
+}
+
+.calc-actions .calc-btn:hover { border-color: var(--gold-dim); }
+
+.calc-restart {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.calc-restart button {
+  background: none;
+  border: none;
+  color: #857a68;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.calc-disclaimer-inline {
+  font-size: 11.5px;
+  color: #9a8f7a;
+  text-align: center;
+  margin-top: 18px;
+  line-height: 1.5;
+}
+
+/* Explanatory sections below the widget */
+.info-section { padding: 64px 0; border-top: 1px solid var(--navy-border); }
+.info-section.alt { background: var(--navy-900); }
+.info-section h2 {
+  font-size: 26px;
+  font-family: Georgia, "Times New Roman", serif;
+  margin-bottom: 18px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.info-body {
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--text-dim);
+  font-size: 15px;
+  line-height: 1.65;
+}
+.info-body ul { padding-left: 22px; }
+.info-body li { margin-bottom: 6px; }
+
+.faq-list { max-width: 720px; margin: 0 auto; }
+.faq-item {
+  border-bottom: 1px solid var(--navy-border);
+  padding: 16px 0;
+}
+.faq-item summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15.5px;
+  color: var(--text);
+  list-style: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::before { content: "+ "; color: var(--gold); }
+.faq-item[open] summary::before { content: "\2212 "; }
+.faq-item p { color: var(--text-dim); font-size: 14.5px; margin: 10px 0 0; line-height: 1.6; }
+
+.author-box {
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--navy-800);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius);
+  padding: 28px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+.author-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--navy-950);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.author-box h3 { margin: 0 0 4px; font-size: 17px; }
+.author-role { font-size: 13px; color: var(--gold); font-weight: 600; margin-bottom: 10px; }
+.author-box p { color: var(--text-dim); font-size: 14px; margin: 0 0 8px; line-height: 1.6; }
+
+.legal-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  color: var(--text-dim);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.legal-page h1 { color: var(--text); font-family: Georgia, "Times New Roman", serif; }
+.legal-page h2 { color: var(--text); font-size: 19px; margin-top: 32px; }
+.legal-page .updated { font-size: 13px; color: #7a8296; margin-bottom: 24px; }
+
+@media print {
+  .site-header, .calc-nav, .calc-actions, .calc-restart, footer, .info-section:not(.print-keep) { display: none !important; }
+  body { background: #fff; color: #000; }
+}
+
+@media (max-width: 560px) {
+  .calc-options { grid-template-columns: 1fr; }
+  .calc-body { padding: 22px 18px 26px; }
+  .calc-question { font-size: 19px; }
+  .author-box { flex-direction: column; text-align: center; align-items: center; }
+}

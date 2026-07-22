@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZEPFLRSCPX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZEPFLRSCPX');
+</script>
+
+<title>Mortgage Calculator With Taxes, Insurance & Closing Costs</title>
+<meta name="description" content="Estimate your complete house payment, including mortgage, property taxes, insurance, PMI and closing costs. Answer a few simple questions and we'll estimate the rest.">
+<link rel="canonical" href="https://40thfloor.com/mortgage-calculator/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230b1220'/%3E%3Ctext x='50' y='66' font-size='44' font-family='Georgia,serif' fill='%23e8b64c' text-anchor='middle'%3E40%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/mortgage-calculator/calc.css">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="40th Floor">
+<meta property="og:title" content="See What a House May Really Cost">
+<meta property="og:description" content="Estimate the monthly payment and cash needed to buy in a few simple steps.">
+<meta property="og:url" content="https://40thfloor.com/mortgage-calculator/">
+<meta property="og:image" content="https://40thfloor.com/mortgage-calculator/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="See What a House May Really Cost">
+<meta name="twitter:description" content="Estimate the monthly payment and cash needed to buy in a few simple steps.">
+<meta name="twitter:image" content="https://40thfloor.com/mortgage-calculator/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Mortgage & House-Payment Calculator",
+  "url": "https://40thfloor.com/mortgage-calculator/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "description": "Estimate your complete monthly house payment and the cash needed to buy, including mortgage, property taxes, insurance, PMI and closing costs.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "publisher": { "@type": "Organization", "name": "40th Floor", "url": "https://40thfloor.com/" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does a mortgage payment include property taxes?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Often, yes. Most lenders collect 1/12th of your estimated annual property taxes and homeowners insurance with every monthly payment, holding it in an escrow account and paying the tax and insurance bills on your behalf when they're due. That's why this calculator's monthly payment includes taxes and insurance, not just principal and interest." }
+    },
+    {
+      "@type": "Question",
+      "name": "How much cash do I need to buy a house?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Beyond your down payment, plan for closing costs (lender, title, and appraisal fees, typically a couple percent of the loan), an inspection, and prepaid escrow for the first few months of taxes and insurance. This calculator estimates all of it together as 'cash needed to buy.'" }
+    },
+    {
+      "@type": "Question",
+      "name": "What is PMI?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Private Mortgage Insurance is required on most conventional loans when the down payment is below 20%. It protects the lender, not you, and is typically added to your monthly payment until you reach enough equity to have it removed. FHA, VA, and USDA loans have their own separate mortgage insurance or funding fee structures." }
+    },
+    {
+      "@type": "Question",
+      "name": "How much house can I afford?",
+      "acceptedAnswer": { "@type": "Answer", "text": "That depends on your income, existing debt, credit, and how much you have for a down payment — a lender will look at your full picture during pre-approval. This calculator helps you see what a specific home price would actually cost per month, which is a useful starting point before you talk to a lender." }
+    },
+    {
+      "@type": "Question",
+      "name": "How accurate is this calculator?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It's a well-informed estimate, not a quote. The interest rate, property tax rate, and insurance cost are all approximations based on typical figures — your actual numbers will depend on your lender, your specific property, and your insurance company. See the methodology page for the exact assumptions used." }
+    },
+    {
+      "@type": "Question",
+      "name": "What closing costs does a buyer pay?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Typically lender fees, title insurance and search fees, an appraisal, recording fees, prepaid interest, and the first deposit into your escrow account for taxes and insurance. Some loan programs also add an upfront mortgage insurance fee, which is usually financed into the loan rather than paid in cash." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Michigan property taxes change after a home is sold?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Often, yes. Under Michigan's Proposal A, a property's taxable value is capped while it's owned by the same person, but that cap is removed ('uncapped') in the year after a sale, resetting taxable value closer to the state equalized value (SEV). This means a buyer's tax bill can be noticeably higher than what the seller was paying — don't assume the seller's current tax bill is what you'll pay." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I buy a home with less than 20% down?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Conventional loans can go as low as 3–5% down, FHA loans allow 3.5%, and VA and USDA loans can allow 0% down for eligible buyers. Putting down less than 20% on a conventional loan generally means paying PMI until you build enough equity." }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="/" class="logo">40<span>th</span> Floor</a>
+    <nav class="main-nav">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Free Tools</a>
+      <a href="/#about">How it works</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="landing-hero">
+  <div class="wrap">
+    <a href="/#apps" class="back-link">&larr; All apps</a>
+    <div class="landing-icon">🏡</div>
+    <h1>What Will This House Really Cost?</h1>
+    <p class="landing-sub">Estimate your complete monthly payment and how much money you may need to buy — mortgage, taxes, insurance, mortgage insurance and closing costs, all in one place.</p>
+  </div>
+</section>
+
+<section class="calc-section">
+  <div class="wrap">
+    <div class="calc-widget" id="calc-widget">
+      <div class="calc-progress" id="calc-progress"></div>
+      <div class="calc-body" id="calc-body"></div>
+    </div>
+  </div>
+</section>
+
+<section class="info-section">
+  <div class="wrap">
+    <h2>What the result includes</h2>
+    <div class="info-body">
+      <p>Your estimated monthly house payment adds up everything a typical mortgage payment actually includes:</p>
+      <ul>
+        <li><strong>Principal and interest</strong> — paying down the loan itself</li>
+        <li><strong>Property taxes</strong> — estimated for your state, collected monthly by most lenders</li>
+        <li><strong>Homeowners insurance</strong> — estimated from your home price and how you'll use the property</li>
+        <li><strong>Mortgage insurance (PMI/MIP)</strong> — if your down payment is below 20% on a conventional loan, or on FHA/USDA loans</li>
+        <li><strong>HOA dues</strong> — if you told us the home has one</li>
+      </ul>
+      <p>The "cash needed to buy" result adds your down payment to estimated closing costs, prepaid taxes and insurance, and a typical inspection fee — everything you'd realistically need in the bank before closing day.</p>
+    </div>
+  </div>
+</section>
+
+<section class="info-section alt">
+  <div class="wrap">
+    <h2>How the calculator works</h2>
+    <div class="info-body">
+      <p>You tell us the things only you know — the home price, your down payment, roughly where your credit stands, and how the property will be used. We estimate everything else: a starting interest rate based on typical rates for your loan type and credit tier, a property tax estimate based on your state, homeowners insurance based on your home's price and use, and mortgage insurance based on your loan type and down payment.</p>
+      <p>Every automated number is labeled "Estimate" in the full breakdown, and you can type in your own number any time — for example, once you get a real insurance quote or a rate from a lender.</p>
+      <p>Full detail on every assumption is on our <a href="/mortgage-calculator/methodology/">methodology page</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="info-section">
+  <div class="wrap">
+    <h2>Why this estimate may differ from your actual payment</h2>
+    <div class="info-body">
+      <ul>
+        <li><strong>Interest rates change daily</strong> and depend on your specific lender, loan type, and how your full application looks — this calculator uses a typical starting rate, not a live quote.</li>
+        <li><strong>Your actual credit score</strong> affects both your rate and your mortgage insurance cost more precisely than the broad ranges used here.</li>
+        <li><strong>A real insurance quote</strong> from an agent will always be more accurate than our estimate, which is based only on home price and use.</li>
+        <li><strong>Property tax reassessment</strong> — especially in Michigan, where taxable value resets after a sale (see our FAQ below).</li>
+        <li><strong>HOA information</strong> you don't yet have can change the total significantly.</li>
+        <li><strong>Lender fees vary</strong> — different lenders and title companies charge different amounts.</li>
+        <li><strong>Your closing date</strong> changes exactly how much prepaid interest and escrow you'll need.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="info-section alt">
+  <div class="wrap">
+    <h2>Ways to lower the payment</h2>
+    <div class="info-body">
+      <ul>
+        <li><strong>A larger down payment</strong> — reduces your loan amount and can remove PMI entirely at 20% down</li>
+        <li><strong>A lower purchase price</strong> — the single biggest lever on every number in this calculator</li>
+        <li><strong>Improved credit</strong> — even moving up one tier can meaningfully lower your rate and PMI</li>
+        <li><strong>A different loan program</strong> — FHA, VA, or USDA may fit your situation better than conventional</li>
+        <li><strong>Seller concessions</strong> — asking the seller to cover some closing costs</li>
+        <li><strong>A lower HOA cost</strong> — worth factoring in when comparing similar homes</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="info-section">
+  <div class="wrap">
+    <h2>Frequently asked questions</h2>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Does a mortgage payment include property taxes?</summary>
+        <p>Often, yes. Most lenders collect 1/12th of your estimated annual property taxes and homeowners insurance with every monthly payment, holding it in an escrow account and paying the tax and insurance bills on your behalf when they're due. That's why this calculator's monthly payment includes taxes and insurance, not just principal and interest.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How much cash do I need to buy a house?</summary>
+        <p>Beyond your down payment, plan for closing costs (lender, title, and appraisal fees, typically a couple percent of the loan), an inspection, and prepaid escrow for the first few months of taxes and insurance. This calculator estimates all of it together as "cash needed to buy."</p>
+      </details>
+      <details class="faq-item">
+        <summary>What is PMI?</summary>
+        <p>Private Mortgage Insurance is required on most conventional loans when the down payment is below 20%. It protects the lender, not you, and is typically added to your monthly payment until you reach enough equity to have it removed. FHA, VA, and USDA loans have their own separate mortgage insurance or funding fee structures.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How much house can I afford?</summary>
+        <p>That depends on your income, existing debt, credit, and how much you have for a down payment — a lender will look at your full picture during pre-approval. This calculator helps you see what a specific home price would actually cost per month, which is a useful starting point before you talk to a lender.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How accurate is this calculator?</summary>
+        <p>It's a well-informed estimate, not a quote. The interest rate, property tax rate, and insurance cost are all approximations based on typical figures — your actual numbers will depend on your lender, your specific property, and your insurance company. See the <a href="/mortgage-calculator/methodology/">methodology page</a> for the exact assumptions used.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What closing costs does a buyer pay?</summary>
+        <p>Typically lender fees, title insurance and search fees, an appraisal, recording fees, prepaid interest, and the first deposit into your escrow account for taxes and insurance. Some loan programs also add an upfront mortgage insurance fee, which is usually financed into the loan rather than paid in cash.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do Michigan property taxes change after a home is sold?</summary>
+        <p>Often, yes. Under Michigan's Proposal A, a property's taxable value is capped while it's owned by the same person, but that cap is removed ("uncapped") in the year after a sale, resetting taxable value closer to the state equalized value (SEV). This means a buyer's tax bill can be noticeably higher than what the seller was paying — don't assume the seller's current tax bill is what you'll pay.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I buy a home with less than 20% down?</summary>
+        <p>Yes. Conventional loans can go as low as 3–5% down, FHA loans allow 3.5%, and VA and USDA loans can allow 0% down for eligible buyers. Putting down less than 20% on a conventional loan generally means paying PMI until you build enough equity.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="info-section alt">
+  <div class="wrap">
+    <h2>About the author</h2>
+    <div class="author-box">
+      <div class="author-avatar">JH</div>
+      <div>
+        <h3>John Hankerd</h3>
+        <div class="author-role">Realtor, State of Michigan</div>
+        <p>John helps buyers across Michigan understand the real cost of a home before they make an offer — not just the sale price, but the full monthly payment and the cash it actually takes to close. This calculator grew out of that same goal: fewer surprises, clearer numbers.</p>
+        <p>Have questions about whether these numbers are realistic for a particular Michigan home? <a href="mailto:40thFloorinfo@gmail.com">Get in touch</a>.</p>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:16px;"><a href="/mortgage-calculator/methodology/" style="color:var(--text-dim); font-size:13px;">Read our full methodology</a> &nbsp;·&nbsp; <a href="/mortgage-calculator/disclaimer/" style="color:var(--text-dim); font-size:13px;">Disclaimer</a> &nbsp;·&nbsp; <a href="/mortgage-calculator/privacy/" style="color:var(--text-dim); font-size:13px;">Privacy</a></p>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap footer-inner">
+    <div class="logo">40<span>th</span> Floor</div>
+    <p class="footer-note">Software for small local businesses.</p>
+    <p class="footer-contact">Questions? <a href="mailto:40thFloorinfo@gmail.com">40thFloorinfo@gmail.com</a></p>
+    <p class="footer-copy">&copy; <span id="year"></span> 40th Floor</p>
+  </div>
+</footer>
+
+<script src="/landing.js"></script>
+<script src="/mortgage-calculator/calc.js"></script>
+</body>
+</html>

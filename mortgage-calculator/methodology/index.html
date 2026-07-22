@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZEPFLRSCPX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZEPFLRSCPX');
+</script>
+
+<title>Methodology — Mortgage Calculator | 40th Floor</title>
+<meta name="description" content="How the 40th Floor mortgage calculator estimates interest rate, property taxes, insurance, mortgage insurance, and closing costs — every assumption explained.">
+<link rel="canonical" href="https://40thfloor.com/mortgage-calculator/methodology/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230b1220'/%3E%3Ctext x='50' y='66' font-size='44' font-family='Georgia,serif' fill='%23e8b64c' text-anchor='middle'%3E40%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/mortgage-calculator/calc.css">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="40th Floor">
+<meta property="og:title" content="Methodology — Mortgage Calculator">
+<meta property="og:description" content="How the 40th Floor mortgage calculator estimates interest rate, property taxes, insurance, mortgage insurance, and closing costs.">
+<meta property="og:url" content="https://40thfloor.com/mortgage-calculator/methodology/">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Mortgage Calculator Methodology",
+  "url": "https://40thfloor.com/mortgage-calculator/methodology/",
+  "datePublished": "2026-07-22",
+  "dateModified": "2026-07-22",
+  "author": { "@type": "Person", "name": "John Hankerd" },
+  "publisher": { "@type": "Organization", "name": "40th Floor", "url": "https://40thfloor.com/" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="/" class="logo">40<span>th</span> Floor</a>
+    <nav class="main-nav">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Free Tools</a>
+      <a href="/#about">How it works</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="legal-page">
+  <p><a href="/mortgage-calculator/" style="color:var(--gold); text-decoration:none;">&larr; Back to the calculator</a></p>
+  <h1>Methodology</h1>
+  <p class="updated">Last reviewed: July 2026</p>
+
+  <p>This page explains exactly how every number in the mortgage calculator is estimated, so you can judge for yourself how much to rely on it. Every automated figure below is also editable directly in the calculator's "complete breakdown" — if you know a better number, use it.</p>
+
+  <h2>The payment formula</h2>
+  <p>Principal and interest use the standard fixed-rate amortization formula over a 30-year term: <code>M = P × [r(1+r)^n] / [(1+r)^n − 1]</code>, where P is the loan amount, r is the monthly interest rate, and n is 360 payments.</p>
+
+  <h2>Interest rate</h2>
+  <p>We start from a single sample baseline rate for a well-qualified conventional 30-year loan on a primary residence, then adjust it based on your loan type, credit tier, down payment, and how the property will be used. <strong>This baseline is a periodically-updated sample, not a live market feed</strong> — actual rates move daily and vary by lender. Treat the result as a reasonable starting point, not a quote.</p>
+
+  <h2>Property taxes</h2>
+  <p>We apply a flat estimated effective tax rate to the home price: a Michigan-specific rate for Michigan properties, and a national-average rate otherwise. This is a rough approximation — it does not look up your specific municipality, county, or the seller's actual current tax bill.</p>
+  <p><strong>Michigan buyers specifically:</strong> under Proposal A, a property's taxable value is capped annually while owned by the same person, but that cap is removed the year after a sale. Your tax bill as the buyer will often be meaningfully different from what the current owner pays — never assume the seller's tax bill is what you'll owe.</p>
+
+  <h2>Homeowners insurance</h2>
+  <p>Estimated as a percentage of home price, adjusted upward for rental and second-home use (insurers generally charge more for non-owner-occupied and secondary properties). This does not reflect your home's construction type, claims history, roof age, or any other factor a real insurance quote would consider.</p>
+
+  <h2>Mortgage insurance (PMI/MIP)</h2>
+  <p>Conventional loans below 20% down use a credit-tier-based annual PMI rate applied to the loan amount, with an added adjustment at higher loan-to-value ratios. FHA loans use a standard annual MIP rate plus an upfront MIP that's typically financed into the loan. VA loans use the published VA funding fee table (first-time-use assumptions) instead of monthly PMI. USDA loans use the standard annual guarantee fee plus an upfront fee. These are simplified versions of each program's real published rate tables.</p>
+
+  <h2>Closing costs</h2>
+  <p>Lender, title, and related fees are estimated as a percentage of the loan amount, plus a flat appraisal fee and inspection allowance. Prepaid escrow assumes roughly three months of taxes and insurance collected upfront, and prepaid interest assumes roughly 15 days between closing and your first full payment cycle. Real closing costs vary by lender, title company, state, and closing date.</p>
+
+  <h2>Suggested loan type</h2>
+  <p>The calculator suggests a starting loan type — Conventional, FHA, VA, or USDA — based on your stated circumstances (first-time buyer, veteran/military, rural property) and down payment. <strong>This is a starting point for a conversation with a lender, not an eligibility determination or approval of any kind.</strong></p>
+
+  <h2>Known limitations</h2>
+  <ul>
+    <li>No live interest-rate feed — the baseline rate must be updated manually and can go stale between reviews.</li>
+    <li>No per-county or per-municipality property tax lookup — only a state-level (Michigan vs. other) approximation.</li>
+    <li>No real insurance quote integration.</li>
+    <li>Does not consider your income, debt, or overall affordability — only the cost of a specific home at a specific price.</li>
+    <li>Loan program suggestions do not check actual program eligibility rules in full (e.g., USDA property-eligibility maps, VA entitlement details).</li>
+  </ul>
+
+  <h2>Questions about a specific estimate</h2>
+  <p>If a number here doesn't look right for your situation, or you'd like help thinking through what it means for a real Michigan home, <a href="mailto:40thFloorinfo@gmail.com" style="color:var(--gold);">reach out</a>.</p>
+</div>
+
+<footer id="contact">
+  <div class="wrap footer-inner">
+    <div class="logo">40<span>th</span> Floor</div>
+    <p class="footer-note">Software for small local businesses.</p>
+    <p class="footer-contact">Questions? <a href="mailto:40thFloorinfo@gmail.com">40thFloorinfo@gmail.com</a></p>
+    <p class="footer-copy">&copy; <span id="year"></span> 40th Floor</p>
+  </div>
+</footer>
+
+<script src="/landing.js"></script>
+</body>
+</html>
