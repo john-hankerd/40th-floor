@@ -538,17 +538,17 @@
     let michiganNote = '';
     if (state.stateCode === 'MI') {
       michiganNote = isMichiganHomestead()
-        ? '<p>Taxed as a Michigan <strong>homestead</strong> — the Principal Residence Exemption excuses primary residences from the local school operating millage.</p>'
-        : '<p>Taxed as <strong>non-homestead</strong> Michigan property — second homes and rentals don’t qualify for the Principal Residence Exemption, so the tax estimate is higher.</p>';
+        ? '<p>Taxed as a Michigan <strong>homestead</strong> — the Principal Residence Exemption excuses primary residences from the local school operating millage. <a href="/guides/michigan-property-taxes-after-home-sale/" style="color:var(--gold);">Why could taxes change after purchase?</a></p>'
+        : '<p>Taxed as <strong>non-homestead</strong> Michigan property — second homes and rentals don’t qualify for the Principal Residence Exemption, so the tax estimate is higher. <a href="/guides/michigan-property-taxes-after-home-sale/" style="color:var(--gold);">Why could taxes change after purchase?</a></p>';
     }
-    head.innerHTML = `<div class="calc-eyebrow">Your estimate</div><p>Suggested starting loan type: <strong>${r.loanType}</strong> — not an approval or a rate lock.</p>${michiganNote}`;
+    head.innerHTML = `<div class="calc-eyebrow">Your estimate</div><p>Suggested starting loan type: <strong>${r.loanType}</strong> — not an approval or a rate lock. <a href="/guides/conventional-vs-fha/" style="color:var(--gold);">Compare loan types</a></p>${michiganNote}`;
 
     const card1 = document.createElement('div');
     card1.className = 'calc-result-card';
     card1.innerHTML = `
       <div class="calc-result-label">Estimated monthly house payment</div>
       <div class="calc-result-value">${fmtMoney(Math.round(r.totalMonthly))}<span style="font-size:15px;font-weight:600;">/mo</span></div>
-      <div class="calc-result-includes">Includes principal &amp; interest, estimated property taxes, homeowners insurance${r.pmi ? ', mortgage insurance' : ''}${r.hoaMonthly ? ', HOA' : ''}.</div>
+      <div class="calc-result-includes">Includes principal &amp; interest, estimated property taxes, homeowners insurance${r.pmi ? ', mortgage insurance' : ''}${r.hoaMonthly ? ', HOA' : ''}. <a href="/guides/what-is-included-in-a-mortgage-payment/" style="color:var(--gold);">What's included?</a>${r.pmi ? ' &middot; <a href="/guides/what-is-pmi/" style="color:var(--gold);">Why is mortgage insurance included?</a>' : ''}</div>
     `;
 
     const card2 = document.createElement('div');
@@ -556,7 +556,7 @@
     card2.innerHTML = `
       <div class="calc-result-label">Estimated cash needed to buy</div>
       <div class="calc-result-value">${fmtMoney(Math.round(r.cashToClose))}</div>
-      <div class="calc-result-includes">Down payment, estimated closing costs, prepaid taxes/insurance, and an inspection allowance.${r.financedFee ? ` (${fmtMoney(r.financedFee)} in upfront loan fees is typically financed into the loan, not paid as cash.)` : ''}</div>
+      <div class="calc-result-includes">Down payment, estimated closing costs, prepaid taxes/insurance, and an inspection allowance.${r.financedFee ? ` (${fmtMoney(r.financedFee)} in upfront loan fees is typically financed into the loan, not paid as cash.)` : ''} <a href="/guides/how-much-cash-do-i-need-to-buy-a-house/" style="color:var(--gold);">See the full breakdown</a></div>
     `;
 
     const toggle = document.createElement('button');
