@@ -34,7 +34,7 @@
   "url": "https://40thfloor.com/mortgage-calculator/methodology/",
   "datePublished": "2026-07-22",
   "dateModified": "2026-07-22",
-  "author": { "@type": "Person", "name": "John Hankerd" },
+  "author": { "@type": "Organization", "name": "40th Floor" },
   "publisher": { "@type": "Organization", "name": "40th Floor", "url": "https://40thfloor.com/" }
 }
 </script>
@@ -67,8 +67,14 @@
   <p>We start from a single sample baseline rate for a well-qualified conventional 30-year loan on a primary residence, then adjust it based on your loan type, credit tier, down payment, and how the property will be used. <strong>This baseline is a periodically-updated sample, not a live market feed</strong> — actual rates move daily and vary by lender. Treat the result as a reasonable starting point, not a quote.</p>
 
   <h2>Property taxes</h2>
-  <p>We apply a flat estimated effective tax rate to the home price: a Michigan-specific rate for Michigan properties, and a national-average rate otherwise. This is a rough approximation — it does not look up your specific municipality, county, or the seller's actual current tax bill.</p>
-  <p><strong>Michigan buyers specifically:</strong> under Proposal A, a property's taxable value is capped annually while owned by the same person, but that cap is removed the year after a sale. Your tax bill as the buyer will often be meaningfully different from what the current owner pays — never assume the seller's tax bill is what you'll owe.</p>
+  <p>Outside Michigan, we apply a flat national-average effective tax rate (1.1% of home price annually) to the home price. This is a rough approximation — it does not look up your specific municipality, county, or the seller's actual current tax bill.</p>
+  <p><strong>Michigan properties get a more detailed model.</strong> Michigan property tax is calculated as <em>taxable value × total millage ÷ 1000</em>. We estimate taxable value as roughly 50% of the home price (Michigan's constitution caps assessed value at about half of true cash value, and taxable value resets close to that level the year after a sale — see below). For millage, the single biggest factor is whether the home qualifies as your <strong>homestead</strong>:</p>
+  <ul>
+    <li><strong>Homestead (primary residence):</strong> Michigan's Principal Residence Exemption (PRE) excuses an owner-occupied primary home from the local school operating millage — typically around 18 mills. We use an estimated statewide-average homestead millage of <strong>32 mills</strong>, giving an effective rate of about <strong>1.6%</strong> of home price.</li>
+    <li><strong>Non-homestead (second home or rental):</strong> without the PRE, that school operating millage still applies. We use an estimated <strong>50 mills</strong>, giving an effective rate of about <strong>2.5%</strong> of home price.</li>
+  </ul>
+  <p>The calculator determines homestead status directly from your answer to "how will the property be used?" — primary home counts as homestead, second home and rental don't. Actual millage varies by township, city, and school district (some areas run meaningfully higher or lower than these statewide averages), so this is still an approximation, not a bill from your local treasurer.</p>
+  <p><strong>Why a buyer's tax bill can jump after closing:</strong> under Michigan's Proposal A, a property's taxable value is capped annually while owned by the same person — it can rise only a little each year even if the market value jumps. That cap is removed ("uncapped") the year after a sale, resetting taxable value close to the state equalized value (SEV, roughly half of market value). This is why a buyer's real tax bill is often noticeably different from whatever the seller was paying — never assume the seller's current bill is what you'll owe.</p>
 
   <h2>Homeowners insurance</h2>
   <p>Estimated as a percentage of home price, adjusted upward for rental and second-home use (insurers generally charge more for non-owner-occupied and secondary properties). This does not reflect your home's construction type, claims history, roof age, or any other factor a real insurance quote would consider.</p>

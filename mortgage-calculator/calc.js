@@ -82,9 +82,28 @@
     return Math.max(r, 2);
   }
 
+  function isMichiganHomestead() {
+    // Michigan's Principal Residence Exemption (PRE) excuses an owner-occupied
+    // primary residence from the local school operating millage (typically
+    // ~18 mills) that non-homestead property still pays. This is the single
+    // biggest lever on a Michigan buyer's real tax bill, bigger than most
+    // county-to-county variation — modeling it beats a single flat rate.
+    return state.use === 'primary';
+  }
+
   function estimatedTaxRateAnnual() {
     if (state.overrides.taxRate != null) return state.overrides.taxRate;
-    return state.stateCode === 'MI' ? 1.5 : 1.1;
+    if (state.stateCode !== 'MI') return 1.1; // national average effective rate
+
+    // Michigan taxes = taxable value × total millage / 1000. Taxable value
+    // resets to roughly the state equalized value (SEV) the year after a
+    // sale (see methodology/FAQ), and SEV is constitutionally capped at
+    // ~50% of true cash value — so taxable value is approximated here as
+    // 50% of price. Millage varies by township/school district; these are
+    // statewide-average approximations, not a per-municipality lookup.
+    const taxableValueRatio = 0.5;
+    const millage = isMichiganHomestead() ? 32 : 50; // mills; non-homestead pays the ~18-mill school operating tax homestead is exempt from
+    return taxableValueRatio * (millage / 10); // e.g. 0.5 * 32/10 = 1.6%
   }
 
   function estimatedInsuranceAnnual() {
@@ -516,7 +535,13 @@
 
     const head = document.createElement('div');
     head.className = 'calc-results-head';
-    head.innerHTML = `<div class="calc-eyebrow">Your estimate</div><p>Suggested starting loan type: <strong>${r.loanType}</strong> — not an approval or a rate lock.</p>`;
+    let michiganNote = '';
+    if (state.stateCode === 'MI') {
+      michiganNote = isMichiganHomestead()
+        ? '<p>Taxed as a Michigan <strong>homestead</strong> — the Principal Residence Exemption excuses primary residences from the local school operating millage.</p>'
+        : '<p>Taxed as <strong>non-homestead</strong> Michigan property — second homes and rentals don’t qualify for the Principal Residence Exemption, so the tax estimate is higher.</p>';
+    }
+    head.innerHTML = `<div class="calc-eyebrow">Your estimate</div><p>Suggested starting loan type: <strong>${r.loanType}</strong> — not an approval or a rate lock.</p>${michiganNote}`;
 
     const card1 = document.createElement('div');
     card1.className = 'calc-result-card';
