@@ -62,6 +62,18 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "/fuelstop/*"
+  to = "https://fuelstop-836.netlify.app/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/fuelstop"
+  to = "/fuelstop/"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
