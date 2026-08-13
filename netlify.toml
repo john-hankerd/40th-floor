@@ -63,14 +63,26 @@
   force = true
 
 [[redirects]]
-  from = "/fuelstop/*"
-  to = "https://fuelstop-836.netlify.app/:splat"
+  from = "/gaspicker/*"
+  to = "https://gaspicker.netlify.app/:splat"
   status = 200
   force = true
 
 [[redirects]]
+  from = "/gaspicker"
+  to = "/gaspicker/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/fuelstop/*"
+  to = "/gaspicker/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/fuelstop"
-  to = "/fuelstop/"
+  to = "/gaspicker/"
   status = 301
   force = true
 
