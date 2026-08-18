@@ -20,6 +20,9 @@
     use: null,
     // overrides, set once the user edits a breakdown field
     overrides: {},
+    // fires the calculator_result_viewed GA event once per page load, not on
+    // every re-render triggered by an inline breakdown edit
+    resultsTracked: false,
   };
 
   const els = {};
@@ -532,6 +535,16 @@
   function renderResults() {
     els.body.innerHTML = '';
     const r = compute();
+
+    if (!state.resultsTracked) {
+      state.resultsTracked = true;
+      if (typeof gtag === 'function') {
+        gtag('event', 'calculator_result_viewed', {
+          state_code: state.stateCode || undefined,
+          loan_type: r.loanType || undefined,
+        });
+      }
+    }
 
     const head = document.createElement('div');
     head.className = 'calc-results-head';
