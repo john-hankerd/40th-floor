@@ -7,6 +7,7 @@
 
 (function () {
   const state = {
+    entryChoice: null, // 'home' once chosen; investment property navigates away instead
     step: 0,
     homePrice: null,
     location: '',
@@ -254,6 +255,14 @@
 
   function renderStepPrice() {
     els.body.innerHTML = '';
+    const switchLink = document.createElement('button');
+    switchLink.type = 'button';
+    switchLink.className = 'calc-switch-link';
+    switchLink.textContent = '← Not buying a home to live in?';
+    switchLink.addEventListener('click', () => {
+      state.entryChoice = null;
+      render();
+    });
     const eyebrow = document.createElement('div');
     eyebrow.className = 'calc-eyebrow';
     eyebrow.textContent = 'Step 1 of 7';
@@ -274,7 +283,7 @@
     hint.className = 'calc-hint';
     hint.textContent = "Haven't chosen a house yet? Enter your target budget — you can change this anytime.";
 
-    els.body.append(eyebrow, q, input, hint);
+    els.body.append(switchLink, eyebrow, q, input, hint);
     const nav = navRow(!!state.homePrice, next);
     els.body.appendChild(nav);
 
@@ -634,7 +643,34 @@
     els.body.append(head, card1, card2, toggle, table, actions, restart, disclaimer);
   }
 
+  function renderChooser() {
+    els.progress.style.display = 'none';
+    els.body.innerHTML = '';
+    const eyebrow = document.createElement('div');
+    eyebrow.className = 'calc-eyebrow';
+    eyebrow.textContent = "Let's get started";
+    const q = document.createElement('div');
+    q.className = 'calc-question';
+    q.textContent = 'What are you calculating?';
+
+    const opts = document.createElement('div');
+    opts.className = 'calc-options calc-options-wide';
+    opts.appendChild(optionButton('A home to live in', 'Monthly payment and cash to close', false, () => {
+      state.entryChoice = 'home';
+      render();
+    }));
+    opts.appendChild(optionButton('An investment property', "What to pay for your target return, or the return on a price you already have", false, () => {
+      window.location.href = '/investment-calculator/';
+    }));
+
+    els.body.append(eyebrow, q, opts);
+  }
+
   function render() {
+    if (!state.entryChoice) {
+      renderChooser();
+      return;
+    }
     renderProgress();
     const name = STEPS[state.step];
     const map = {
