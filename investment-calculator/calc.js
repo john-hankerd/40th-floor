@@ -231,6 +231,12 @@
     return section;
   }
 
+  function updateUnitsTotal() {
+    if (!els.unitsTotalEl) return;
+    const monthly = state.units.reduce((sum, u) => sum + (u.rent || 0), 0);
+    els.unitsTotalEl.textContent = `Total: ${fmtMoney(monthly)}/mo (${fmtMoney(monthly * 12)}/yr before vacancy)`;
+  }
+
   function renderUnitsSection() {
     els.unitsContainer.innerHTML = '';
     const section = document.createElement('div');
@@ -255,7 +261,10 @@
       labelInput.value = u.label;
       labelInput.addEventListener('input', () => { u.label = labelInput.value; });
 
-      const rentInput = numberInput(u.rent || '', 'Monthly rent $', (v) => { u.rent = v || null; });
+      const rentInput = numberInput(u.rent || '', 'Monthly rent $', (v) => {
+        u.rent = v || null;
+        updateUnitsTotal();
+      });
 
       row.append(labelInput, rentInput);
 
@@ -288,8 +297,8 @@
 
     const total = document.createElement('div');
     total.className = 'calc-unit-total';
-    const monthly = state.units.reduce((sum, u) => sum + (u.rent || 0), 0);
-    total.textContent = `Total: ${fmtMoney(monthly)}/mo (${fmtMoney(monthly * 12)}/yr before vacancy)`;
+    els.unitsTotalEl = total;
+    updateUnitsTotal();
     section.appendChild(total);
 
     els.unitsContainer.appendChild(section);
