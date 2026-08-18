@@ -37,6 +37,31 @@
   padding: 28px 28px 32px;
 }
 
+.calc-form-section {
+  margin-bottom: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #ece6d9;
+}
+.calc-form-section:last-child { border-bottom: none; }
+
+.calc-section-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: #5a5347;
+  margin-bottom: 10px;
+}
+
+.calc-form-section .calc-input,
+.calc-form-section select.calc-input {
+  margin-bottom: 8px;
+}
+
+.calc-results-live {
+  margin-top: 8px;
+  padding-top: 22px;
+  border-top: 2px solid var(--gold-dim);
+}
+
 .calc-eyebrow {
   font-size: 12px;
   font-weight: 700;

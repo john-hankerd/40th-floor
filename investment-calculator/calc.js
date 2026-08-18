@@ -2,8 +2,13 @@
 // All estimates are computed client-side from typical expense ratios and
 // national/Michigan tax-rate approximations — there is no live rate feed,
 // geocoding, or tax-record lookup here. Every automated number is clearly
-// labeled "estimate" and is editable by the user in the breakdown. See
+// labeled "estimate" and is editable by the user. See
 // /investment-calculator/methodology/ for the full explanation.
+//
+// Unlike the mortgage calculator, this is a persistent single-screen form,
+// not a step wizard: every input stays visible and editable so you can
+// adjust one number (rent, target return, vacancy...) and immediately see
+// how the result changes, to compare scenarios quickly.
 
 (function () {
   const TYPE_DEFAULTS = {
@@ -14,12 +19,11 @@
   };
 
   const state = {
-    step: 0,
-    propertyType: null,
+    propertyType: 'multifamily',
     address: '',
     stateCode: '',
     units: [{ label: 'Unit 1', rent: null }],
-    hasAskingPrice: null,
+    hasAskingPrice: false,
     askingPrice: null,
     targetCapRate: 7,
     showFinancing: false,
@@ -47,13 +51,7 @@
     return TYPE_DEFAULTS[state.propertyType] || TYPE_DEFAULTS.other;
   }
 
-  // ---------- Core math ----------
-  // Every rent/lease line the user enters is monthly; GPI is the annualized
-  // total at full occupancy. EGI backs out vacancy loss. "EGI net" backs out
-  // management/maintenance/misc operating expenses (as a % of EGI, varies by
-  // property type) but NOT property tax or insurance — those are modeled
-  // separately as a % of price so the reverse "what should I pay" math stays
-  // a clean, direct calculation instead of a guess-and-check loop.
+  // ---------- Core math (unchanged formulas, hand-verified) ----------
 
   function grossPotentialIncomeAnnual() {
     return state.units.reduce((sum, u) => sum + (u.rent || 0), 0) * 12;
@@ -69,13 +67,10 @@
 
   function taxRatePct() {
     if (state.overrides.taxRatePct != null) return state.overrides.taxRatePct;
-    if (state.stateCode !== 'MI') return 1.1; // national average effective rate
-    // Investment property never qualifies for Michigan's Principal Residence
-    // Exemption, so it's always taxed at the non-homestead millage — see the
-    // mortgage calculator's methodology page for the same model in more detail.
+    if (state.stateCode !== 'MI') return 1.1;
     const taxableValueRatio = 0.5;
     const millage = 50;
-    return taxableValueRatio * (millage / 10); // 2.5%
+    return taxableValueRatio * (millage / 10);
   }
 
   function insuranceRatePct() {
@@ -83,8 +78,6 @@
   }
 
   function carryRatePct() {
-    // Property tax + insurance, combined, as a % of price — the part of
-    // operating cost that scales with what's actually paid for the property.
     return taxRatePct() + insuranceRatePct();
   }
 
@@ -144,28 +137,21 @@
     return { price, noi, capRate, loanAmount, annualDebtService, cashFlow, cashInvested, coc, dscr };
   }
 
-  // ---------- Step definitions ----------
-  const STEPS = ['type', 'address', 'units', 'vacancy', 'target', 'results'];
-
-  function renderProgress() {
-    const total = STEPS.length - 1;
-    let html = '';
-    for (let i = 0; i < total; i++) {
-      const cls = i < state.step ? 'done' : i === state.step ? 'current' : '';
-      html += `<div class="calc-progress-dot ${cls}"></div>`;
-    }
-    els.progress.innerHTML = html;
-    els.progress.style.display = state.step >= total ? 'none' : 'flex';
+  function hasIncome() {
+    return state.units.some((u) => u.rent);
   }
 
-  function goTo(step) {
-    state.step = step;
-    render();
-    els.widget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  // ---------- Live-update plumbing ----------
+  // Button/select changes rebuild the section they're in immediately (no
+  // typing to interrupt). Number/text inputs only mutate state and schedule
+  // a debounced results refresh, so typing never loses focus or cursor
+  // position — only the results panel re-renders, never the form itself.
 
-  function next() { if (state.step < STEPS.length - 1) goTo(state.step + 1); }
-  function back() { if (state.step > 0) goTo(state.step - 1); }
+  let debounceTimer = null;
+  function scheduleResultsUpdate() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(renderResults, 300);
+  }
 
   function optionButton(label, sub, selected, onClick) {
     const btn = document.createElement('button');
@@ -176,60 +162,49 @@
     return btn;
   }
 
-  function navRow(canNext, onNext, nextLabel) {
-    const row = document.createElement('div');
-    row.className = 'calc-nav';
-    if (state.step > 0) {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'calc-btn calc-btn-back';
-      b.textContent = '← Back';
-      b.addEventListener('click', back);
-      row.appendChild(b);
-    } else {
-      row.appendChild(document.createElement('span'));
-    }
-    const n = document.createElement('button');
-    n.type = 'button';
-    n.className = 'calc-btn calc-btn-primary';
-    n.textContent = nextLabel || 'Next';
-    n.disabled = !canNext;
-    n.addEventListener('click', onNext);
-    row.appendChild(n);
-    return row;
+  function numberInput(value, placeholder, onInput, extraClass) {
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.className = 'calc-input' + (extraClass ? ` ${extraClass}` : '');
+    input.inputMode = 'decimal';
+    if (placeholder) input.placeholder = placeholder;
+    if (value != null) input.value = value;
+    input.addEventListener('input', () => {
+      onInput(parseFloat(input.value));
+      scheduleResultsUpdate();
+    });
+    return input;
   }
 
-  function renderStepType() {
-    els.body.innerHTML = '';
-    const eyebrow = document.createElement('div');
-    eyebrow.className = 'calc-eyebrow';
-    eyebrow.textContent = 'Step 1 of 5';
-    const q = document.createElement('div');
-    q.className = 'calc-question';
-    q.textContent = 'What kind of property is it?';
+  // ---------- Form sections ----------
 
+  function renderPropertyTypeSection() {
+    const section = document.createElement('div');
+    section.className = 'calc-form-section';
+    const label = document.createElement('div');
+    label.className = 'calc-section-label';
+    label.textContent = 'Property type';
     const opts = document.createElement('div');
     opts.className = 'calc-options calc-options-wide';
     Object.entries(TYPE_DEFAULTS).forEach(([val, def]) => {
       opts.appendChild(optionButton(def.label, '', state.propertyType === val, () => {
         state.propertyType = val;
-        renderStepType();
+        state.overrides.vacancyPct = null;
+        state.overrides.opExPct = null;
+        renderForm();
+        renderResults();
       }));
     });
-
-    els.body.append(eyebrow, q, opts);
-    const nav = navRow(!!state.propertyType, next);
-    els.body.appendChild(nav);
+    section.append(label, opts);
+    return section;
   }
 
-  function renderStepAddress() {
-    els.body.innerHTML = '';
-    const eyebrow = document.createElement('div');
-    eyebrow.className = 'calc-eyebrow';
-    eyebrow.textContent = 'Step 2 of 5';
-    const q = document.createElement('div');
-    q.className = 'calc-question';
-    q.textContent = 'Where is the property?';
+  function renderAddressSection() {
+    const section = document.createElement('div');
+    section.className = 'calc-form-section';
+    const label = document.createElement('div');
+    label.className = 'calc-section-label';
+    label.textContent = 'Property location';
 
     const input = document.createElement('input');
     input.type = 'text';
@@ -238,50 +213,37 @@
     input.value = state.address;
     input.addEventListener('input', () => { state.address = input.value; });
 
-    const stateLabel = document.createElement('div');
-    stateLabel.className = 'calc-hint';
-    stateLabel.style.marginTop = '16px';
-    stateLabel.textContent = 'State (used to estimate property taxes):';
-
     const select = document.createElement('select');
     select.className = 'calc-input';
     select.style.marginTop = '8px';
-    const stateOptions = [
-      ['', 'Select a state'], ['MI', 'Michigan'], ['OTHER', 'Other / not sure'],
-    ];
-    stateOptions.forEach(([val, label]) => {
+    [['', 'Select a state (for tax estimate)'], ['MI', 'Michigan'], ['OTHER', 'Other / not sure']].forEach(([val, lbl]) => {
       const o = document.createElement('option');
-      o.value = val; o.textContent = label;
+      o.value = val; o.textContent = lbl;
       if (state.stateCode === val) o.selected = true;
       select.appendChild(o);
     });
-    select.addEventListener('change', () => { state.stateCode = select.value; });
+    select.addEventListener('change', () => {
+      state.stateCode = select.value;
+      renderResults();
+    });
 
-    const hint = document.createElement('div');
-    hint.className = 'calc-hint';
-    hint.textContent = "We don't pull the actual tax bill for a specific address — we estimate a rate based on the state, and you can always type in the real number once you have it.";
-
-    els.body.append(eyebrow, q, input, stateLabel, select, hint);
-    const nav = navRow(true, next);
-    els.body.appendChild(nav);
+    section.append(label, input, select);
+    return section;
   }
 
-  function renderStepUnits() {
-    els.body.innerHTML = '';
-    const eyebrow = document.createElement('div');
-    eyebrow.className = 'calc-eyebrow';
-    eyebrow.textContent = 'Step 3 of 5';
-    const q = document.createElement('div');
-    q.className = 'calc-question';
-    q.textContent = 'What rent or lease income can you expect?';
+  function renderUnitsSection() {
+    els.unitsContainer.innerHTML = '';
+    const section = document.createElement('div');
+    section.className = 'calc-form-section';
+    const label = document.createElement('div');
+    label.className = 'calc-section-label';
+    label.textContent = 'Rent or lease income';
     const hint = document.createElement('div');
     hint.className = 'calc-hint';
-    hint.style.marginBottom = '14px';
+    hint.style.marginBottom = '10px';
     hint.textContent = 'Add a line for each unit or leased space, with its expected monthly rent.';
+    section.append(label, hint);
 
-    els.body.append(eyebrow, q, hint);
-
-    const list = document.createElement('div');
     state.units.forEach((u, i) => {
       const row = document.createElement('div');
       row.className = 'calc-unit-row';
@@ -293,17 +255,7 @@
       labelInput.value = u.label;
       labelInput.addEventListener('input', () => { u.label = labelInput.value; });
 
-      const rentInput = document.createElement('input');
-      rentInput.type = 'number';
-      rentInput.className = 'calc-input';
-      rentInput.inputMode = 'numeric';
-      rentInput.placeholder = 'Monthly rent $';
-      rentInput.value = u.rent || '';
-      rentInput.addEventListener('input', () => {
-        u.rent = parseFloat(rentInput.value) || null;
-        updateTotal();
-        nav.querySelector('.calc-btn-primary').disabled = !canGo();
-      });
+      const rentInput = numberInput(u.rent || '', 'Monthly rent $', (v) => { u.rent = v || null; });
 
       row.append(labelInput, rentInput);
 
@@ -314,14 +266,14 @@
         removeBtn.innerHTML = '&times;';
         removeBtn.addEventListener('click', () => {
           state.units.splice(i, 1);
-          renderStepUnits();
+          renderUnitsSection();
+          renderResults();
         });
         row.appendChild(removeBtn);
       }
 
-      list.appendChild(row);
+      section.appendChild(row);
     });
-    els.body.appendChild(list);
 
     const addBtn = document.createElement('button');
     addBtn.type = 'button';
@@ -329,110 +281,128 @@
     addBtn.textContent = '+ Add another unit / space';
     addBtn.addEventListener('click', () => {
       state.units.push({ label: `Unit ${state.units.length + 1}`, rent: null });
-      renderStepUnits();
+      renderUnitsSection();
+      renderResults();
     });
-    els.body.appendChild(addBtn);
+    section.appendChild(addBtn);
 
     const total = document.createElement('div');
     total.className = 'calc-unit-total';
-    els.body.appendChild(total);
+    const monthly = state.units.reduce((sum, u) => sum + (u.rent || 0), 0);
+    total.textContent = `Total: ${fmtMoney(monthly)}/mo (${fmtMoney(monthly * 12)}/yr before vacancy)`;
+    section.appendChild(total);
 
-    function updateTotal() {
-      const monthly = state.units.reduce((sum, u) => sum + (u.rent || 0), 0);
-      total.textContent = `Total: ${fmtMoney(monthly)}/mo (${fmtMoney(monthly * 12)}/yr before vacancy)`;
-    }
-    updateTotal();
-
-    function canGo() {
-      return state.units.some((u) => u.rent);
-    }
-
-    const nav = navRow(canGo(), next);
-    els.body.appendChild(nav);
+    els.unitsContainer.appendChild(section);
   }
 
-  function renderStepVacancy() {
-    els.body.innerHTML = '';
-    const eyebrow = document.createElement('div');
-    eyebrow.className = 'calc-eyebrow';
-    eyebrow.textContent = 'Step 4 of 5';
-    const q = document.createElement('div');
-    q.className = 'calc-question';
-    q.textContent = 'How much vacancy should we plan for?';
-    const hint = document.createElement('div');
-    hint.className = 'calc-hint';
-    hint.style.marginBottom = '14px';
-    hint.textContent = `A typical starting point for a ${typeDefaults().label.toLowerCase()} is ${typeDefaults().vacancy}% — you can fine-tune this and other assumptions in the results.`;
+  function renderAssumptionsSection() {
+    els.assumptionsContainer.innerHTML = '';
+    const section = document.createElement('div');
+    section.className = 'calc-form-section';
+    const label = document.createElement('div');
+    label.className = 'calc-section-label';
+    label.textContent = 'Vacancy & target return';
 
-    const opts = document.createElement('div');
-    opts.className = 'calc-options';
-    [0, 3, 5, 8, 10, 15].forEach((pct) => {
-      opts.appendChild(optionButton(`${pct}%`, '', vacancyPct() === pct, () => {
-        state.overrides.vacancyPct = pct;
-        renderStepVacancy();
-      }));
-    });
+    const row1 = document.createElement('div');
+    row1.className = 'calc-field-row';
+    const vacWrap = document.createElement('div');
+    const vacLabel = document.createElement('label');
+    vacLabel.textContent = `Vacancy % (typical: ${typeDefaults().vacancy}%)`;
+    const vacInput = numberInput(vacancyPct(), null, (v) => { state.overrides.vacancyPct = isNaN(v) ? null : v; });
+    vacWrap.append(vacLabel, vacInput);
 
-    els.body.append(eyebrow, q, hint, opts);
-    const nav = navRow(true, next);
-    els.body.appendChild(nav);
-  }
+    const targetWrap = document.createElement('div');
+    const targetLabel = document.createElement('label');
+    targetLabel.textContent = 'Target cap rate %';
+    const targetInput = numberInput(state.targetCapRate, null, (v) => { state.targetCapRate = v || 0; });
+    targetWrap.append(targetLabel, targetInput);
 
-  function renderStepTarget() {
-    els.body.innerHTML = '';
-    const eyebrow = document.createElement('div');
-    eyebrow.className = 'calc-eyebrow';
-    eyebrow.textContent = 'Step 5 of 5';
-    const q = document.createElement('div');
-    q.className = 'calc-question';
-    q.textContent = 'What return are you targeting?';
-    const hint = document.createElement('div');
-    hint.className = 'calc-hint';
-    hint.style.marginBottom = '14px';
-    hint.textContent = "This is the cap rate (return before financing) you'd want to hit — 7% is a reasonable starting point, but it varies a lot by market and property condition. You can change this anytime on the results screen.";
-
-    const rateInput = document.createElement('input');
-    rateInput.type = 'number';
-    rateInput.className = 'calc-input-large';
-    rateInput.step = '0.25';
-    rateInput.value = state.targetCapRate;
-    rateInput.addEventListener('input', () => {
-      state.targetCapRate = parseFloat(rateInput.value) || 0;
-    });
+    row1.append(vacWrap, targetWrap);
+    section.append(label, row1);
 
     const askLabel = document.createElement('div');
     askLabel.className = 'calc-hint';
-    askLabel.style.marginTop = '20px';
+    askLabel.style.marginTop = '4px';
     askLabel.textContent = 'Do you have an asking price to check?';
-
     const opts = document.createElement('div');
     opts.className = 'calc-options';
-    [['no', 'Not yet'], ['yes', 'Yes']].forEach(([val, label]) => {
-      opts.appendChild(optionButton(label, '', state.hasAskingPrice === val, () => {
-        state.hasAskingPrice = val;
-        renderStepTarget();
+    [['no', 'Not yet'], ['yes', 'Yes']].forEach(([val, lbl]) => {
+      opts.appendChild(optionButton(lbl, '', (state.hasAskingPrice ? 'yes' : 'no') === val, () => {
+        state.hasAskingPrice = val === 'yes';
+        renderAssumptionsSection();
+        renderResults();
       }));
     });
+    section.append(askLabel, opts);
 
-    els.body.append(eyebrow, q, hint, rateInput, askLabel, opts);
-
-    if (state.hasAskingPrice === 'yes') {
-      const priceInput = document.createElement('input');
-      priceInput.type = 'number';
-      priceInput.className = 'calc-input';
-      priceInput.style.marginTop = '14px';
-      priceInput.inputMode = 'numeric';
-      priceInput.placeholder = 'Asking price $';
-      priceInput.value = state.askingPrice || '';
-      priceInput.addEventListener('input', () => { state.askingPrice = parseFloat(priceInput.value) || null; });
-      els.body.appendChild(priceInput);
+    if (state.hasAskingPrice) {
+      const priceInput = numberInput(state.askingPrice || '', 'Asking price $', (v) => { state.askingPrice = v || null; });
+      priceInput.style.marginTop = '10px';
+      section.appendChild(priceInput);
     }
 
-    const nav = navRow(!!state.targetCapRate, () => { goTo(STEPS.length - 1); }, 'See my estimate');
-    els.body.appendChild(nav);
+    els.assumptionsContainer.appendChild(section);
   }
 
-  function editableRow(label, value, key, isMoney, isPercent, onChange) {
+  function renderFinancingSection() {
+    els.financingContainer.innerHTML = '';
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'calc-breakdown-toggle';
+    toggle.textContent = state.showFinancing ? 'Hide financing / cash-on-cash' : 'Also factor in financing (cash-on-cash return)';
+    toggle.addEventListener('click', () => {
+      state.showFinancing = !state.showFinancing;
+      renderFinancingSection();
+      renderResults();
+    });
+    els.financingContainer.appendChild(toggle);
+
+    if (!state.showFinancing) return;
+
+    const panel = document.createElement('div');
+    panel.className = 'calc-financing-panel';
+
+    function field(labelText, key, step) {
+      const wrap = document.createElement('div');
+      const lbl = document.createElement('label');
+      lbl.textContent = labelText;
+      const input = numberInput(state.financing[key], null, (v) => { state.financing[key] = isNaN(v) ? 0 : v; });
+      input.step = step;
+      wrap.append(lbl, input);
+      return wrap;
+    }
+
+    const row1 = document.createElement('div');
+    row1.className = 'calc-field-row';
+    row1.append(field('Down payment (%)', 'downPct', '1'), field('Closing costs (%)', 'closingPct', '0.5'));
+    const row2 = document.createElement('div');
+    row2.className = 'calc-field-row';
+    row2.append(field('Interest rate (%)', 'rate', '0.125'), field('Loan term (years)', 'termYears', '1'));
+    panel.append(row1, row2, field('Target cash-on-cash (%)', 'targetCoC', '0.5'));
+    els.financingContainer.appendChild(panel);
+  }
+
+  function renderForm() {
+    els.form.innerHTML = '';
+    els.form.appendChild(renderPropertyTypeSection());
+    els.form.appendChild(renderAddressSection());
+
+    els.unitsContainer = document.createElement('div');
+    els.form.appendChild(els.unitsContainer);
+    renderUnitsSection();
+
+    els.assumptionsContainer = document.createElement('div');
+    els.form.appendChild(els.assumptionsContainer);
+    renderAssumptionsSection();
+
+    els.financingContainer = document.createElement('div');
+    els.form.appendChild(els.financingContainer);
+    renderFinancingSection();
+  }
+
+  // ---------- Results (re-rendered live, never destroys the form) ----------
+
+  function editableRow(label, value, key, isPercent) {
     const tr = document.createElement('tr');
     tr.className = 'calc-editable';
     const td1 = document.createElement('td');
@@ -442,11 +412,11 @@
     input.type = 'number';
     input.className = 'calc-edit-input';
     input.step = isPercent ? '0.05' : '1';
-    input.value = isPercent ? value.toFixed(2) : Math.round(value);
+    input.value = value.toFixed(2);
     input.addEventListener('change', () => {
       const v = parseFloat(input.value);
       if (!isNaN(v)) state.overrides[key] = v;
-      (onChange || renderResults)();
+      renderResults();
     });
     td2.appendChild(input);
     tr.append(td1, td2);
@@ -465,10 +435,20 @@
   }
 
   function renderResults() {
-    els.body.innerHTML = '';
+    els.results.innerHTML = '';
+
+    if (!hasIncome()) {
+      const placeholder = document.createElement('div');
+      placeholder.className = 'calc-hint';
+      placeholder.style.textAlign = 'center';
+      placeholder.style.padding = '20px 0';
+      placeholder.textContent = 'Enter at least one rent or lease amount above to see your estimate.';
+      els.results.appendChild(placeholder);
+      return;
+    }
 
     const suggestedPrice = suggestedPriceForCapRate(state.targetCapRate);
-    const hasAsking = state.hasAskingPrice === 'yes' && state.askingPrice;
+    const hasAsking = state.hasAskingPrice && state.askingPrice;
     const askingAnalysis = hasAsking ? analyzeAtPrice(state.askingPrice) : null;
 
     if (!state.resultsTracked) {
@@ -477,7 +457,7 @@
         gtag('event', 'investment_calculator_result_viewed', {
           property_type: state.propertyType || undefined,
           state_code: state.stateCode || undefined,
-          had_asking_price: hasAsking,
+          had_asking_price: !!hasAsking,
         });
       }
     }
@@ -494,7 +474,7 @@
       <div class="calc-result-includes">The most you'd want to pay for this income to hit your target return, after estimated vacancy, operating expenses, property tax, and insurance — before financing.</div>
     `;
 
-    els.body.append(head, card1);
+    els.results.append(head, card1);
 
     if (askingAnalysis) {
       const card2 = document.createElement('div');
@@ -504,82 +484,40 @@
         <div class="calc-result-value">${fmtPct(askingAnalysis.capRate * 100)}<span style="font-size:15px;font-weight:600;"> cap rate</span></div>
         <div class="calc-result-includes">Estimated net operating income of ${fmtMoney(Math.round(askingAnalysis.noi))}/yr at that price.</div>
       `;
-      els.body.appendChild(card2);
+      els.results.appendChild(card2);
     }
 
     const toggle = document.createElement('button');
     toggle.type = 'button';
     toggle.className = 'calc-breakdown-toggle';
-    toggle.textContent = 'Show the complete breakdown';
+    toggle.textContent = els.breakdownOpen ? 'Hide the complete breakdown' : 'Show the complete breakdown';
 
     const table = document.createElement('table');
     table.className = 'calc-breakdown-table';
-    table.style.display = 'none';
+    table.style.display = els.breakdownOpen ? 'table' : 'none';
     table.appendChild(staticRow('Gross potential income (annual)', fmtMoney(grossPotentialIncomeAnnual())));
-    table.appendChild(editableRow('Vacancy & credit loss', vacancyPct(), 'vacancyPct', false, true));
+    table.appendChild(editableRow('Vacancy & credit loss (%)', vacancyPct(), 'vacancyPct', true));
     table.appendChild(staticRow('Effective gross income', fmtMoney(Math.round(egiAnnual()))));
-    table.appendChild(editableRow('Operating expenses (% of EGI — mgmt, maintenance, misc.)', opExPct(), 'opExPct', false, true));
-    table.appendChild(editableRow('Property tax rate (% of price)', taxRatePct(), 'taxRatePct', false, true));
-    table.appendChild(editableRow('Insurance rate (% of price)', insuranceRatePct(), 'insuranceRatePct', false, true));
+    table.appendChild(editableRow('Operating expenses (% of EGI — mgmt, maintenance, misc.)', opExPct(), 'opExPct', true));
+    table.appendChild(editableRow('Property tax rate (% of price)', taxRatePct(), 'taxRatePct', true));
+    table.appendChild(editableRow('Insurance rate (% of price)', insuranceRatePct(), 'insuranceRatePct', true));
     if (askingAnalysis) {
       table.appendChild(staticRow(`Net operating income at ${fmtMoney(state.askingPrice)}`, fmtMoney(Math.round(askingAnalysis.noi)), true));
     }
 
     toggle.addEventListener('click', () => {
-      const open = table.style.display !== 'none';
-      table.style.display = open ? 'none' : 'table';
-      toggle.textContent = open ? 'Show the complete breakdown' : 'Hide the complete breakdown';
-    });
-
-    els.body.append(toggle, table);
-
-    // Financing / cash-on-cash section — optional, since it needs assumptions
-    // beyond the property itself.
-    const financeToggle = document.createElement('button');
-    financeToggle.type = 'button';
-    financeToggle.className = 'calc-breakdown-toggle';
-    financeToggle.textContent = state.showFinancing ? 'Hide financed return (cash-on-cash)' : 'Also see the return if you finance it';
-    financeToggle.addEventListener('click', () => {
-      state.showFinancing = !state.showFinancing;
+      els.breakdownOpen = !els.breakdownOpen;
       renderResults();
     });
-    els.body.appendChild(financeToggle);
+
+    els.results.append(toggle, table);
 
     if (state.showFinancing) {
-      const panel = document.createElement('div');
-      panel.className = 'calc-financing-panel';
-
-      function financeField(label, key, step, suffix) {
-        const wrap = document.createElement('div');
-        const lbl = document.createElement('label');
-        lbl.textContent = label;
-        const input = document.createElement('input');
-        input.type = 'number';
-        input.className = 'calc-input';
-        input.step = step;
-        input.value = state.financing[key];
-        input.addEventListener('change', () => {
-          const v = parseFloat(input.value);
-          if (!isNaN(v)) state.financing[key] = v;
-          renderResults();
-        });
-        wrap.append(lbl, input);
-        return wrap;
-      }
-
-      const row1 = document.createElement('div');
-      row1.className = 'calc-field-row';
-      row1.append(financeField('Down payment (%)', 'downPct', '1'), financeField('Closing costs (%)', 'closingPct', '0.5'));
-      const row2 = document.createElement('div');
-      row2.className = 'calc-field-row';
-      row2.append(financeField('Interest rate (%)', 'rate', '0.125'), financeField('Loan term (years)', 'termYears', '1'));
-      panel.append(row1, row2);
-
       const priceForCoC = suggestedPriceForCashOnCash(state.financing.targetCoC);
-      const cocCard = document.createElement('div');
-      cocCard.className = 'calc-stat-grid';
-      cocCard.style.gridTemplateColumns = '1fr 1fr';
-      cocCard.innerHTML = `
+      const cocHead = document.createElement('div');
+      cocHead.className = 'calc-stat-grid';
+      cocHead.style.gridTemplateColumns = '1fr 1fr';
+      cocHead.innerHTML = `
         <div class="calc-stat-box">
           <div class="calc-stat-label">Price for ${fmtPct(state.financing.targetCoC)} cash-on-cash</div>
           <div class="calc-stat-value">${priceForCoC != null ? fmtMoney(Math.round(priceForCoC)) : '—'}</div>
@@ -589,7 +527,7 @@
           <div class="calc-stat-value">${fmtPct(state.financing.targetCoC)}</div>
         </div>
       `;
-      panel.appendChild(cocCard);
+      els.results.appendChild(cocHead);
 
       if (askingAnalysis) {
         const stats = document.createElement('div');
@@ -608,16 +546,14 @@
             <div class="calc-stat-value">${askingAnalysis.dscr != null ? askingAnalysis.dscr.toFixed(2) : '—'}</div>
           </div>
         `;
-        panel.appendChild(stats);
+        els.results.appendChild(stats);
       }
 
       const financeHint = document.createElement('div');
       financeHint.className = 'calc-hint';
       financeHint.style.marginTop = '10px';
       financeHint.textContent = 'Cash-on-cash return is your annual cash flow after the mortgage payment, divided by the cash you actually put in (down payment + closing costs). DSCR is net operating income divided by the annual mortgage payment — most lenders want this at 1.20 or higher.';
-      panel.appendChild(financeHint);
-
-      els.body.appendChild(panel);
+      els.results.appendChild(financeHint);
     }
 
     const actions = document.createElement('div');
@@ -628,52 +564,51 @@
     printBtn.textContent = 'Print / Save PDF';
     printBtn.addEventListener('click', () => window.print());
     actions.appendChild(printBtn);
+    els.results.appendChild(actions);
 
-    const restart = document.createElement('div');
-    restart.className = 'calc-restart';
-    const restartBtn = document.createElement('button');
-    restartBtn.type = 'button';
-    restartBtn.textContent = 'Start a new estimate';
-    restartBtn.addEventListener('click', () => {
+    const disclaimer = document.createElement('div');
+    disclaimer.className = 'calc-disclaimer-inline';
+    disclaimer.textContent = 'This is an educational estimate built from typical expense ratios and tax rates, not a real appraisal, rent roll, or lender underwriting. Swap in real numbers here as you get them — actual rents, a real tax bill, a real insurance quote — for a far more accurate picture. Adjust any number above and the estimate updates right away, so you can compare scenarios.';
+    els.results.appendChild(disclaimer);
+  }
+
+  function renderResetLink() {
+    const wrap = document.createElement('div');
+    wrap.className = 'calc-restart';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = 'Start over';
+    btn.addEventListener('click', () => {
       Object.assign(state, {
-        step: 0, propertyType: null, address: '', stateCode: '',
+        propertyType: 'multifamily', address: '', stateCode: '',
         units: [{ label: 'Unit 1', rent: null }],
-        hasAskingPrice: null, askingPrice: null, targetCapRate: 7,
+        hasAskingPrice: false, askingPrice: null, targetCapRate: 7,
         showFinancing: false,
         financing: { downPct: 25, rate: 7.25, termYears: 25, closingPct: 2.5, targetCoC: 8 },
         overrides: {},
       });
-      render();
+      els.breakdownOpen = false;
+      renderForm();
+      renderResults();
     });
-    restart.appendChild(restartBtn);
-
-    const disclaimer = document.createElement('div');
-    disclaimer.className = 'calc-disclaimer-inline';
-    disclaimer.textContent = 'This is an educational estimate built from typical expense ratios and tax rates, not a real appraisal, rent roll, or lender underwriting. Swap in real numbers here as you get them — actual rents, a real tax bill, a real insurance quote — for a far more accurate picture.';
-
-    els.body.append(actions, restart, disclaimer);
-  }
-
-  function render() {
-    renderProgress();
-    const name = STEPS[state.step];
-    const map = {
-      type: renderStepType,
-      address: renderStepAddress,
-      units: renderStepUnits,
-      vacancy: renderStepVacancy,
-      target: renderStepTarget,
-      results: renderResults,
-    };
-    (map[name] || renderStepType)();
+    wrap.appendChild(btn);
+    return wrap;
   }
 
   function init() {
     els.widget = document.getElementById('calc-widget');
     if (!els.widget) return;
-    els.progress = document.getElementById('calc-progress');
+    const progress = document.getElementById('calc-progress');
+    if (progress) progress.remove();
     els.body = document.getElementById('calc-body');
-    render();
+    els.form = document.createElement('div');
+    els.results = document.createElement('div');
+    els.results.className = 'calc-results-live';
+    els.body.append(els.form, els.results);
+    els.body.appendChild(renderResetLink());
+    els.breakdownOpen = false;
+    renderForm();
+    renderResults();
   }
 
   if (document.readyState === 'loading') {
