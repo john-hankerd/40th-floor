@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZEPFLRSCPX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZEPFLRSCPX');
+</script>
+
+<title>Methodology — Investment Property Calculator | 40th Floor</title>
+<meta name="description" content="How the 40th Floor investment property calculator estimates net operating income, cap rate, and cash-on-cash return — every assumption and formula explained.">
+<link rel="canonical" href="https://40thfloor.com/investment-calculator/methodology/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230b1220'/%3E%3Ctext x='50' y='66' font-size='44' font-family='Georgia,serif' fill='%23e8b64c' text-anchor='middle'%3E40%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/investment-calculator/calc.css">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="40th Floor">
+<meta property="og:title" content="Methodology — Investment Property Calculator">
+<meta property="og:description" content="How the 40th Floor investment property calculator estimates net operating income, cap rate, and cash-on-cash return.">
+<meta property="og:url" content="https://40thfloor.com/investment-calculator/methodology/">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Investment Property Calculator Methodology",
+  "url": "https://40thfloor.com/investment-calculator/methodology/",
+  "datePublished": "2026-08-16",
+  "dateModified": "2026-08-16",
+  "author": { "@type": "Organization", "name": "40th Floor" },
+  "publisher": { "@type": "Organization", "name": "40th Floor", "url": "https://40thfloor.com/" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="/" class="logo">40<span>th</span> Floor</a>
+    <nav class="main-nav">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Free Tools</a>
+      <a href="/#about">How it works</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="legal-page">
+  <p><a href="/investment-calculator/" style="color:var(--gold); text-decoration:none;">&larr; Back to the calculator</a></p>
+  <h1>Methodology</h1>
+  <p class="updated">Last reviewed: August 2026</p>
+
+  <p>This page explains exactly how every number in the investment property calculator is estimated, so you can judge for yourself how much to rely on it. Every automated figure below is also editable directly in the calculator's breakdown — if you know a better number, use it.</p>
+
+  <h2>Gross potential income and effective gross income</h2>
+  <p>Gross potential income is the sum of every rent or lease line you enter, annualized (monthly amount × 12). We subtract an estimated vacancy and credit loss percentage — the share of that income a typical property in this condition realistically loses to vacant periods and non-paying tenants — to get effective gross income (EGI).</p>
+
+  <h2>Net operating income (NOI)</h2>
+  <p>From EGI, we subtract two things separately:</p>
+  <ul>
+    <li><strong>Operating expenses</strong> — management, maintenance and repairs, and general miscellaneous costs, modeled as one adjustable percentage of EGI. Typical starting points: 30% for a duplex or small multifamily, 20% for office or retail. These are broad averages for a property where the owner covers most operating costs — an actual triple-net lease, where the tenant pays taxes, insurance, and maintenance directly, would run well below this default.</li>
+    <li><strong>Property tax and insurance</strong> — estimated separately as a percentage of price rather than income, since both scale with what the property is worth, not what it earns. Outside Michigan we use a flat 1.1% national-average effective tax rate; Michigan properties use the same non-homestead millage model as our <a href="/mortgage-calculator/methodology/">mortgage calculator</a> (about 2.5% effective — investment property never qualifies for Michigan's Principal Residence Exemption, so it never gets the lower homestead rate). Insurance defaults to 0.5% of price.</li>
+  </ul>
+  <p>Net operating income is effective gross income, minus operating expenses, minus property tax, minus insurance.</p>
+
+  <h2>Cap rate and the "suggested price"</h2>
+  <p>Cap rate is NOI divided by price. Since NOI is mostly independent of price (only the tax and insurance portion scales with it), we can solve directly for the price that would produce your target cap rate, given the income you entered — no guessing required. That's the "suggested price for your target return" result.</p>
+
+  <h2>Cash-on-cash return</h2>
+  <p>The optional financing section adds a mortgage into the picture. Annual debt service is calculated with the standard fixed-rate amortization formula, based on the down payment, interest rate, and loan term you enter. Cash flow is NOI minus that annual debt service. Cash-on-cash return is cash flow divided by the actual cash invested — the down payment plus closing costs. The "price for your target cash-on-cash return" result solves the same way the cap rate one does, just with the financing terms factored in.</p>
+
+  <h2>DSCR (debt service coverage ratio)</h2>
+  <p>NOI divided by the annual mortgage payment. A lender-facing number, not an investor-return number — it shows how much cushion the property's income gives above what's owed on the loan each year.</p>
+
+  <h2>Property type defaults</h2>
+  <p>Choosing a property type sets starting vacancy and operating-expense percentages based on typical figures for that category — duplex/small multifamily, office, retail/mixed-use, or other. These are broad, national starting points, not specific to any market, building class, or lease structure. Adjust them in the results breakdown once you have a better sense of the actual property.</p>
+
+  <h2>Known limitations</h2>
+  <ul>
+    <li>No live rent-comparable data — every rent figure is what you type in.</li>
+    <li>No per-parcel property tax lookup, only a state-level approximation.</li>
+    <li>No lease-structure modeling (gross vs. triple-net vs. modified gross) — operating expenses are a single blended percentage.</li>
+    <li>No real insurance quote integration.</li>
+    <li>No live financing-rate feed — the cash-on-cash section uses whatever rate, term, and down payment you enter.</li>
+    <li>Does not model capital expenditures, major renovations, or a multi-year hold — this is a single-year snapshot.</li>
+  </ul>
+
+  <h2>Questions about a specific estimate</h2>
+  <p>If a number here doesn't look right for your situation, <a href="mailto:40thFloorinfo@gmail.com" style="color:var(--gold);">reach out</a>.</p>
+</div>
+
+<footer id="contact">
+  <div class="wrap footer-inner">
+    <div class="logo">40<span>th</span> Floor</div>
+    <p class="footer-note">Software for small local businesses.</p>
+    <p class="footer-contact">Questions? <a href="mailto:40thFloorinfo@gmail.com">40thFloorinfo@gmail.com</a></p>
+    <p class="footer-copy">&copy; <span id="year"></span> 40th Floor</p>
+  </div>
+</footer>
+
+<script src="/landing.js"></script>
+</body>
+</html>

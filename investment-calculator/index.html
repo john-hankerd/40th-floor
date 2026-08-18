@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZEPFLRSCPX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-ZEPFLRSCPX');
+</script>
+
+<title>Investment Property Calculator — Cap Rate & Cash-on-Cash Return</title>
+<meta name="description" content="Enter the rent or lease income you expect from a duplex, office building, or storefront, and find out what you should pay for your target return — or check the return on an asking price you already have.">
+<link rel="canonical" href="https://40thfloor.com/investment-calculator/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230b1220'/%3E%3Ctext x='50' y='66' font-size='44' font-family='Georgia,serif' fill='%23e8b64c' text-anchor='middle'%3E40%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/investment-calculator/calc.css">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="40th Floor">
+<meta property="og:title" content="Investment Property Calculator">
+<meta property="og:description" content="What should you pay for a rental, office, or storefront to hit your target return? Enter the expected rent and find out.">
+<meta property="og:url" content="https://40thfloor.com/investment-calculator/">
+<meta property="og:image" content="https://40thfloor.com/og-image.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Investment Property Calculator">
+<meta name="twitter:description" content="What should you pay for a rental, office, or storefront to hit your target return?">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Investment Property Calculator",
+  "url": "https://40thfloor.com/investment-calculator/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "description": "Enter expected rent or lease income for an investment property and see the suggested purchase price for a target return, or the expected return at a given asking price.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "publisher": { "@type": "Organization", "name": "40th Floor", "url": "https://40thfloor.com/" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a cap rate?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Cap rate (capitalization rate) is a property's net operating income divided by its price. It's a way to compare investment properties on the income they produce, without factoring in how the purchase is financed — a higher cap rate generally means more income relative to the price paid." }
+    },
+    {
+      "@type": "Question",
+      "name": "What is cash-on-cash return?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Cash-on-cash return is your annual cash flow after the mortgage payment, divided by the actual cash you put in — the down payment plus closing costs. Unlike cap rate, it accounts for financing, so it reflects what an investor using a loan would actually see on the money they put down." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this pull the actual property tax bill for my address?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. There's no public, free source for pulling a specific parcel's real tax bill nationwide, so this calculator estimates a tax rate based on the state instead. Type in the real number in the breakdown once you have the actual bill or an assessor's estimate." }
+    },
+    {
+      "@type": "Question",
+      "name": "What counts as operating expenses in this calculator?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Management, maintenance and repairs, and general miscellaneous costs, shown as one adjustable percentage of effective gross income. Property tax and insurance are estimated separately as a percentage of price, since they scale with the property's value rather than its income." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this a substitute for a real appraisal or rent roll?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. It's a starting-point estimate built from typical expense ratios and tax rates, meant to help you quickly screen a property before you invest time getting real numbers — an actual rent roll, a real tax bill, a real insurance quote, and a lender's underwriting." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use this for an office building or retail storefront, not just a rental home?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Choosing a property type sets a reasonable starting vacancy rate and operating expense percentage for that kind of property — duplex or small multifamily, office, or retail/mixed-use — and you can adjust either number in the results." }
+    },
+    {
+      "@type": "Question",
+      "name": "What's a good DSCR?",
+      "acceptedAnswer": { "@type": "Answer", "text": "DSCR (debt service coverage ratio) is net operating income divided by the annual mortgage payment. A DSCR of 1.0 means the property's income exactly covers the mortgage with nothing left over. Most lenders want to see at least 1.20 to 1.25 before they'll finance a property." }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="/" class="logo">40<span>th</span> Floor</a>
+    <nav class="main-nav">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Free Tools</a>
+      <a href="/#about">How it works</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="landing-hero">
+  <div class="wrap">
+    <a href="/#apps" class="back-link">&larr; All apps</a>
+    <div class="landing-icon">🏢</div>
+    <h1>What Should You Pay For This Property?</h1>
+    <p class="landing-sub">Enter the rent or lease income you expect from a duplex, office building, or storefront, and see what price would hit your target return — or check the return on an asking price you already have.</p>
+  </div>
+</section>
+
+<section class="calc-section">
+  <div class="wrap">
+    <div class="calc-widget" id="calc-widget">
+      <div class="calc-progress" id="calc-progress"></div>
+      <div class="calc-body" id="calc-body"></div>
+    </div>
+  </div>
+</section>
+
+<section class="info-section">
+  <div class="wrap">
+    <h2>What this calculator does</h2>
+    <div class="info-body">
+      <p>You tell it the things only you know: the property type, the rent or lease income you expect, and the return you're targeting. It estimates everything else — a starting vacancy rate, typical operating expenses, and property tax and insurance based on the state — and gives you two numbers:</p>
+      <ul>
+        <li><strong>Suggested price</strong> — the most you'd want to pay for that income to hit your target return</li>
+        <li><strong>Return at asking price</strong> — if you already have a price in mind, what return it actually produces</li>
+      </ul>
+      <p>Every automated number is labeled "Estimate" and editable — swap in a real number the moment you have one.</p>
+    </div>
+  </div>
+</section>
+
+<section class="info-section alt">
+  <div class="wrap">
+    <h2>How the math works</h2>
+    <div class="info-body">
+      <p>Rent or lease income, minus an estimated vacancy loss, gives effective gross income. Subtracting typical operating expenses (management, maintenance, and miscellaneous costs) and estimated property tax and insurance gives net operating income — the number that actually drives value.</p>
+      <p>The <strong>cap rate</strong> result divides that income by price, with no financing involved — it's the return the property itself produces. If you'd rather see what a loan does to your return, the results screen has an optional <strong>cash-on-cash</strong> section: enter a down payment, rate, and loan term, and it'll show the price for your target cash-on-cash return, plus the actual cash-on-cash and debt coverage at whatever asking price you entered.</p>
+      <p>Read the full <a href="/investment-calculator/methodology/">methodology</a> for every assumption and formula used.</p>
+    </div>
+  </div>
+</section>
+
+<section class="info-section">
+  <div class="wrap">
+    <h2>Why the real numbers may differ</h2>
+    <div class="info-body">
+      <ul>
+        <li><strong>Rent estimates are yours</strong> — this calculator only does the math on what you enter. Get a real comparable-rent opinion before relying on a number.</li>
+        <li><strong>Property tax is a state-level estimate</strong>, not the actual bill for the parcel — request the real number from the seller or the county assessor.</li>
+        <li><strong>Operating expenses vary a lot by property</strong> — an older building or one with deferred maintenance will run higher than the typical percentage used here.</li>
+        <li><strong>Lease structure matters</strong> — a triple-net lease where the tenant pays taxes, insurance, and maintenance directly will have real expenses well below this calculator's default.</li>
+        <li><strong>Financing terms vary by lender</strong> and by how the deal underwrites — the cash-on-cash section uses assumptions you enter, not a real quote.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="info-section alt">
+  <div class="wrap">
+    <h2>Frequently asked questions</h2>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>What is a cap rate?</summary>
+        <p>Cap rate (capitalization rate) is a property's net operating income divided by its price. It's a way to compare investment properties on the income they produce, without factoring in how the purchase is financed — a higher cap rate generally means more income relative to the price paid.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What is cash-on-cash return?</summary>
+        <p>Cash-on-cash return is your annual cash flow after the mortgage payment, divided by the actual cash you put in — the down payment plus closing costs. Unlike cap rate, it accounts for financing, so it reflects what an investor using a loan would actually see on the money they put down.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Does this pull the actual property tax bill for my address?</summary>
+        <p>No. There's no public, free source for pulling a specific parcel's real tax bill nationwide, so this calculator estimates a tax rate based on the state instead. Type in the real number in the breakdown once you have the actual bill or an assessor's estimate.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What counts as operating expenses in this calculator?</summary>
+        <p>Management, maintenance and repairs, and general miscellaneous costs, shown as one adjustable percentage of effective gross income. Property tax and insurance are estimated separately as a percentage of price, since they scale with the property's value rather than its income.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is this a substitute for a real appraisal or rent roll?</summary>
+        <p>No. It's a starting-point estimate built from typical expense ratios and tax rates, meant to help you quickly screen a property before you invest time getting real numbers — an actual rent roll, a real tax bill, a real insurance quote, and a lender's underwriting.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I use this for an office building or retail storefront, not just a rental home?</summary>
+        <p>Yes. Choosing a property type sets a reasonable starting vacancy rate and operating expense percentage for that kind of property — duplex or small multifamily, office, or retail/mixed-use — and you can adjust either number in the results.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What's a good DSCR?</summary>
+        <p>DSCR (debt service coverage ratio) is net operating income divided by the annual mortgage payment. A DSCR of 1.0 means the property's income exactly covers the mortgage with nothing left over. Most lenders want to see at least 1.20 to 1.25 before they'll finance a property.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="info-section">
+  <div class="wrap">
+    <p style="text-align:center;"><a href="/investment-calculator/methodology/" style="color:var(--text-dim); font-size:13px;">Read our full methodology</a> &nbsp;·&nbsp; <a href="/investment-calculator/disclaimer/" style="color:var(--text-dim); font-size:13px;">Disclaimer</a></p>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap footer-inner">
+    <div class="logo">40<span>th</span> Floor</div>
+    <p class="footer-note">Software for small local businesses.</p>
+    <p class="footer-contact">Questions? <a href="mailto:40thFloorinfo@gmail.com">40thFloorinfo@gmail.com</a></p>
+    <p class="footer-copy">&copy; <span id="year"></span> 40th Floor</p>
+  </div>
+</footer>
+
+<script src="/landing.js"></script>
+<script src="/investment-calculator/calc.js"></script>
+</body>
+</html>
