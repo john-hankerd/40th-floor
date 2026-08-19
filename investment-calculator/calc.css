@@ -242,6 +242,18 @@
   background: #fffaf0;
 }
 
+.calc-cashflow-card.calc-cf-positive {
+  border-color: #8fbf9f;
+  background: #f2faf5;
+}
+.calc-cashflow-card.calc-cf-positive .calc-result-value { color: #1b6b46; }
+
+.calc-cashflow-card.calc-cf-negative {
+  border-color: #e0a9a0;
+  background: #fdf3f1;
+}
+.calc-cashflow-card.calc-cf-negative .calc-result-value { color: #b23a2c; }
+
 .calc-result-label {
   font-size: 13px;
   font-weight: 700;

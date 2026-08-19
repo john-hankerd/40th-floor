@@ -522,6 +522,64 @@
     els.results.append(toggle, table);
 
     if (state.showFinancing) {
+      // Cash flow needs a specific price to run the numbers at. Use the real
+      // asking price if there is one; otherwise fall back to the suggested
+      // price so this is always useful, not just when an asking price is typed in.
+      const cashFlowPrice = hasAsking ? state.askingPrice : suggestedPrice;
+      const cashFlowAnalysis = cashFlowPrice ? analyzeAtPrice(cashFlowPrice) : null;
+      const cashFlowPriceLabel = hasAsking
+        ? `at your asking price of ${fmtMoney(state.askingPrice)}`
+        : `at the suggested price of ${fmtMoney(Math.round(cashFlowPrice))}`;
+
+      if (cashFlowAnalysis) {
+        const monthlyNOI = cashFlowAnalysis.noi / 12;
+        const monthlyDebtService = cashFlowAnalysis.annualDebtService / 12;
+        const monthlyCashFlow = cashFlowAnalysis.cashFlow / 12;
+        const positive = monthlyCashFlow >= 0;
+
+        const cfCard = document.createElement('div');
+        cfCard.className = 'calc-result-card calc-cashflow-card ' + (positive ? 'calc-cf-positive' : 'calc-cf-negative');
+        cfCard.innerHTML = `
+          <div class="calc-result-label">Monthly cash flow ${cashFlowPriceLabel}</div>
+          <div class="calc-result-value">${positive ? '' : '&minus;'}${fmtMoney(Math.abs(Math.round(monthlyCashFlow)))}<span style="font-size:15px;font-weight:600;">/mo</span></div>
+          <div class="calc-result-includes">What's left every month after rent, vacancy, operating expenses, property tax, insurance, and the mortgage payment (${fmtMoney(Math.round(monthlyDebtService))}/mo at ${state.financing.rate}% over ${state.financing.termYears} years, ${state.financing.downPct}% down).</div>
+        `;
+        els.results.appendChild(cfCard);
+
+        const cfStats = document.createElement('div');
+        cfStats.className = 'calc-stat-grid';
+        cfStats.innerHTML = `
+          <div class="calc-stat-box">
+            <div class="calc-stat-label">Monthly income (NOI)</div>
+            <div class="calc-stat-value">${fmtMoney(Math.round(monthlyNOI))}</div>
+          </div>
+          <div class="calc-stat-box">
+            <div class="calc-stat-label">Monthly mortgage payment</div>
+            <div class="calc-stat-value">${fmtMoney(Math.round(monthlyDebtService))}</div>
+          </div>
+          <div class="calc-stat-box">
+            <div class="calc-stat-label">DSCR</div>
+            <div class="calc-stat-value">${cashFlowAnalysis.dscr != null ? cashFlowAnalysis.dscr.toFixed(2) : '—'}</div>
+          </div>
+        `;
+        els.results.appendChild(cfStats);
+
+        const cfStats2 = document.createElement('div');
+        cfStats2.className = 'calc-stat-grid';
+        cfStats2.style.gridTemplateColumns = '1fr 1fr';
+        cfStats2.innerHTML = `
+          <div class="calc-stat-box">
+            <div class="calc-stat-label">Cash-on-cash return ${cashFlowPriceLabel}</div>
+            <div class="calc-stat-value">${fmtPct(cashFlowAnalysis.coc * 100)}</div>
+          </div>
+          <div class="calc-stat-box">
+            <div class="calc-stat-label">Cash needed (down + closing)</div>
+            <div class="calc-stat-value">${fmtMoney(Math.round(cashFlowAnalysis.cashInvested))}</div>
+          </div>
+        `;
+        els.results.appendChild(cfStats2);
+      }
+
       const priceForCoC = suggestedPriceForCashOnCash(state.financing.targetCoC);
       const cocHead = document.createElement('div');
       cocHead.className = 'calc-stat-grid';
@@ -538,30 +596,10 @@
       `;
       els.results.appendChild(cocHead);
 
-      if (askingAnalysis) {
-        const stats = document.createElement('div');
-        stats.className = 'calc-stat-grid';
-        stats.innerHTML = `
-          <div class="calc-stat-box">
-            <div class="calc-stat-label">Cash-on-cash at asking</div>
-            <div class="calc-stat-value">${fmtPct(askingAnalysis.coc * 100)}</div>
-          </div>
-          <div class="calc-stat-box">
-            <div class="calc-stat-label">Annual cash flow</div>
-            <div class="calc-stat-value">${fmtMoney(Math.round(askingAnalysis.cashFlow))}</div>
-          </div>
-          <div class="calc-stat-box">
-            <div class="calc-stat-label">DSCR</div>
-            <div class="calc-stat-value">${askingAnalysis.dscr != null ? askingAnalysis.dscr.toFixed(2) : '—'}</div>
-          </div>
-        `;
-        els.results.appendChild(stats);
-      }
-
       const financeHint = document.createElement('div');
       financeHint.className = 'calc-hint';
       financeHint.style.marginTop = '10px';
-      financeHint.textContent = 'Cash-on-cash return is your annual cash flow after the mortgage payment, divided by the cash you actually put in (down payment + closing costs). DSCR is net operating income divided by the annual mortgage payment — most lenders want this at 1.20 or higher.';
+      financeHint.textContent = 'Cash flow is your monthly income after every expense and the mortgage payment. Cash-on-cash return is annual cash flow divided by the cash you actually put in (down payment + closing costs). DSCR is net operating income divided by the mortgage payment — most lenders want at least 1.20. Type in an asking price above to see these at a specific price instead of the suggested one.';
       els.results.appendChild(financeHint);
     }
 
