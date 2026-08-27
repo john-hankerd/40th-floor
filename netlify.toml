@@ -62,15 +62,19 @@
   status = 301
   force = true
 
+# GasPicker is a full app with its own serverless functions on www.gaspicker.com.
+# Proxying its pages here (status 200) served the app from 40thfloor.com, where
+# its /.netlify/functions/* calls 404'd — so we REDIRECT to the real origin
+# instead of proxying, so the backend calls resolve.
 [[redirects]]
   from = "/gaspicker/*"
-  to = "https://gaspicker.netlify.app/:splat"
-  status = 200
+  to = "https://www.gaspicker.com/:splat"
+  status = 301
   force = true
 
 [[redirects]]
   from = "/gaspicker"
-  to = "/gaspicker/"
+  to = "https://www.gaspicker.com/"
   status = 301
   force = true
 
