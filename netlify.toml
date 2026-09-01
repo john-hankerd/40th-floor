@@ -90,6 +90,21 @@
   status = 301
   force = true
 
+# The Case File — true-crime companion app (React/Vite SPA on its own Netlify
+# site, base path /casefile/). Wildcard proxy first, then the trailing-slash
+# redirect (order matters — see the scannow pattern).
+[[redirects]]
+  from = "/casefile/*"
+  to = "https://casefile-40th.netlify.app/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/casefile"
+  to = "/casefile/"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
