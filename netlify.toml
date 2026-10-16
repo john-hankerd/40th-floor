@@ -105,6 +105,18 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "/glow/*"
+  to = "https://glow-owosso.netlify.app/glow/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/glow"
+  to = "/glow/"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
