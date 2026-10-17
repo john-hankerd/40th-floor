@@ -117,6 +117,25 @@
   status = 301
   force = true
 
+# Event Hub is a Next.js app with basePath /eventhub, deployed at
+# https://event-hub-40thfloor.netlify.app/eventhub
+# The app returns 200 for /eventhub and 308s /eventhub/ to /eventhub.
+# Do not 301 /eventhub to /eventhub/ — that pair is a redirect loop.
+# Proxy the bare path and every subpath (pages and /eventhub/_next assets).
+# force = true matches the other proxies so these rules win over any
+# broader rule. There is no trailing-slash redirect here.
+[[redirects]]
+  from = "/eventhub/*"
+  to = "https://event-hub-40thfloor.netlify.app/eventhub/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/eventhub"
+  to = "https://event-hub-40thfloor.netlify.app/eventhub"
+  status = 200
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
