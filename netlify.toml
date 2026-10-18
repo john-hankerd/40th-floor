@@ -90,18 +90,27 @@
   status = 301
   force = true
 
-# The Case File — true-crime companion app (React/Vite SPA on its own Netlify
-# site, base path /casefile/). Wildcard proxy first, then the trailing-slash
-# redirect (order matters — see the scannow pattern).
+# Minudex (formerly The Case File) is a Vite SPA at https://minudex.com
+# (Netlify site casefile-40th). A status-200 proxy under /casefile/ returned
+# that app's index.html, whose script and stylesheet are root-relative
+# (/assets/...). The browser then requested those files from 40thfloor.com,
+# where they 404, so the page stayed blank. Redirect old links to the real site.
+# Exact paths come before the splat (first match wins).
 [[redirects]]
-  from = "/casefile/*"
-  to = "https://casefile-40th.netlify.app/:splat"
-  status = 200
+  from = "/casefile"
+  to = "https://minudex.com/"
+  status = 301
   force = true
 
 [[redirects]]
-  from = "/casefile"
-  to = "/casefile/"
+  from = "/casefile/"
+  to = "https://minudex.com/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/casefile/*"
+  to = "https://minudex.com/:splat"
   status = 301
   force = true
 
