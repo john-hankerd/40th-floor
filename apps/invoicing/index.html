@@ -14,7 +14,7 @@
 </script>
 
 <title>Invoice &amp; Estimate Builder — Professional invoices in minutes | 40th Floor</title>
-<meta name="description" content="Build a professional invoice or estimate in a couple of minutes and send it straight to your customer. They can view it, download a PDF, approve an estimate, or pay online. $20/mo, 30-day free trial.">
+<meta name="description" content="Build a professional invoice or estimate in a couple of minutes and send it straight to your customer. They can view it, download a PDF, approve an estimate, or pay online. $20/mo or $200/yr (2 months free), 30-day free trial.">
 <link rel="canonical" href="https://40thfloor.com/apps/invoicing/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%230b1220'/%3E%3Ctext x='50' y='66' font-size='44' font-family='Georgia,serif' fill='%23e8b64c' text-anchor='middle'%3E40%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="/styles.css">
@@ -22,14 +22,14 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="40th Floor">
 <meta property="og:title" content="Invoice & Estimate Builder — Professional invoices in minutes">
-<meta property="og:description" content="Send a professional invoice or estimate straight to your customer. They can view it, download a PDF, approve an estimate, or pay online. $20/mo, 30-day free trial.">
+<meta property="og:description" content="Send a professional invoice or estimate straight to your customer. They can view it, download a PDF, approve an estimate, or pay online. $20/mo or $200/yr (2 months free), 30-day free trial.">
 <meta property="og:url" content="https://40thfloor.com/apps/invoicing/">
 <meta property="og:image" content="https://40thfloor.com/apps/invoicing/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Invoice & Estimate Builder — Professional invoices in minutes">
-<meta name="twitter:description" content="Send a professional invoice or estimate straight to your customer. $20/mo, 30-day free trial.">
+<meta name="twitter:description" content="Send a professional invoice or estimate straight to your customer. $20/mo or $200/yr (2 months free), 30-day free trial.">
 <meta name="twitter:image" content="https://40thfloor.com/apps/invoicing/og-image.png">
 
 <script type="application/ld+json">
@@ -41,7 +41,36 @@
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web",
   "description": "Build a professional invoice or estimate in a couple of minutes and send it straight to your customer.",
-  "offers": { "@type": "Offer", "price": "20.00", "priceCurrency": "USD" },
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Monthly",
+      "price": "20.00",
+      "priceCurrency": "USD",
+      "description": "30-day free trial, then $20 per month.",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "20.00",
+        "priceCurrency": "USD",
+        "billingDuration": 1,
+        "unitCode": "MON"
+      }
+    },
+    {
+      "@type": "Offer",
+      "name": "Annual",
+      "price": "200.00",
+      "priceCurrency": "USD",
+      "description": "30-day free trial, then $200 per year (2 months free compared with paying monthly).",
+      "priceSpecification": {
+        "@type": "UnitPriceSpecification",
+        "price": "200.00",
+        "priceCurrency": "USD",
+        "billingDuration": 1,
+        "unitCode": "ANN"
+      }
+    }
+  ],
   "publisher": { "@type": "Organization", "name": "40th Floor", "url": "https://40thfloor.com/" }
 }
 </script>
@@ -69,7 +98,7 @@
     <p class="landing-sub">Put together a polished invoice or estimate in a couple of minutes and send it straight to your customer — they can view it, download a PDF, approve an estimate, or pay you online, right from the link.</p>
     <div class="hero-cta">
       <a href="/invoicing/" class="btn btn-primary">Open Invoice &amp; Estimate Builder</a>
-      <span class="hero-note">$20/mo · 30-day free trial</span>
+      <span class="hero-note">$20/mo or $200/yr (2 months free) · 30-day free trial</span>
     </div>
     <div class="landing-shot">
       <img src="screenshot.png" alt="A sample invoice as your customer sees it, with line items and a Pay Now button" loading="lazy">
@@ -108,7 +137,7 @@
 <section class="landing-cta-section">
   <div class="wrap">
     <h2>Ready to try it?</h2>
-    <p>$20/mo, with a 30-day free trial.</p>
+    <p>$20/mo or $200/yr (2 months free), with a 30-day free trial.</p>
     <a href="/invoicing/" class="btn btn-primary">Open Invoice &amp; Estimate Builder</a>
   </div>
 </section>
