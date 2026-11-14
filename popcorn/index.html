@@ -705,10 +705,23 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
 
   function clone(t) { return t.map(function (a) { return a.slice(); }); }
 
+  // The move count for the level in play is kept on the phone. Restart, Undo, and
+  // reloading the page never lower it. It only goes back to 0 on the next level.
+  function savedMoves() {
+    try {
+      var v = JSON.parse(store("popcornSortMoves"));
+      if (v && v.level === level && v.moves > 0) return v.moves;
+    } catch (e) {}
+    return 0;
+  }
+  function saveMoves() { store("popcornSortMoves", JSON.stringify({ level: level, moves: moves })); }
+
   function newGame(freshMix) {
-    if (freshMix || !startTubes.length) startTubes = makeMix(level);
+    if (freshMix || !startTubes.length) {
+      startTubes = makeMix(level);
+      moves = savedMoves();     // a new level starts at 0; coming back to a level picks the count back up
+    }
     tubes = clone(startTubes);
-    moves = 0;
     history = [];
     extraUsed = false;
     sel = -1;
@@ -742,7 +755,7 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
         });
       }
     }
-    if (flying.length) { intro = true; setStatus("Here it comes!"); }
+    if (flying.length) { intro = true; setStatus(moves > 0 ? "Fresh start. Your moves keep counting." : "Here it comes!"); }
     else setStatus(HINT);
   }
 
@@ -1119,6 +1132,7 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
       }
     }
     moves++;
+    saveMoves();
     updateHud();
     if (reduceMotion) afterMove();
     return true;
@@ -1212,15 +1226,17 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
     if (!history.length || won || flying.length) return;
     var h = history.pop();
     tubes = h.tubes;
-    moves = h.moves;
-    extraUsed = h.extraUsed;
     sel = -1;
-    setStatus("Took that one back.");
+    setStatus("Took that one back. The move still counts.");
     updateHud();
     layout();
     kick();
   });
-  btnRestart.addEventListener("click", function () { if (!won) newGame(false); });
+  btnRestart.addEventListener("click", function () {
+    if (won) return;
+    newGame(false);
+    if (moves > 0 && reduceMotion) setStatus("Fresh start. Your moves keep counting.");
+  });
   btnNext.addEventListener("click", function () { newGame(true); });
 
   // ---------- leaderboard ----------
