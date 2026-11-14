@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Popcorn Sort">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>Wooden Crate Popcorn Sort</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -221,6 +229,31 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
   font-size: 17px;
 }
 
+/* Add-to-phone bar */
+#install {
+  position: fixed;
+  left: 8px;
+  right: 8px;
+  top: 8px;
+  z-index: 5;
+  max-width: 540px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 8px 10px;
+  background: #000;
+  color: #fff;
+  border: 2px solid var(--butter);
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+}
+#install[hidden] { display: none; }
+#install img { flex: none; width: 40px; height: 40px; }
+#install p { flex: 1 1 auto; margin: 0; font-size: 14px; line-height: 1.3; }
+#installBtn { flex: none; min-height: 42px; padding: 6px 14px; }
+#installX { flex: none; min-height: 42px; width: 38px; padding: 0; font-size: 20px; color: #fff; background: none; border-color: transparent; }
+
 /* Arcade leaderboard */
 .arcade {
   position: fixed;
@@ -413,6 +446,13 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
     <p class="u-name" id="uName"></p>
     <button class="u-btn" id="uPlay" type="button">Play</button>
   </div>
+</div>
+
+<div id="install" hidden>
+  <img src="icons/popcorn-96.png" alt="" width="40" height="40">
+  <p id="installText">Put Popcorn Sort on your phone.</p>
+  <button id="installBtn" type="button">Install</button>
+  <button id="installX" type="button" aria-label="Close">&times;</button>
 </div>
 
 <div id="hs" class="arcade" hidden>
@@ -1487,6 +1527,47 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
   } else {
     window.addEventListener("resize", function () { if (tubes.length) { layout(); kick(); } });
   }
+
+  // ---------- add to phone ----------
+  // Shows once. After the game is on the phone (or they say "Got it"), it never shows again.
+  (function () {
+    var bar = document.getElementById("install");
+    var text = document.getElementById("installText");
+    var btn = document.getElementById("installBtn");
+    var standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+    if (standalone) { store("popcornSortInstall", "1"); return; }
+    if ("serviceWorker" in navigator && location.protocol === "https:") {
+      try { navigator.serviceWorker.register("sw.js").catch(function () {}); } catch (e) {}
+    }
+    if (store("popcornSortInstall") === "1") return;
+    var deferred = null;
+    function done() { store("popcornSortInstall", "1"); bar.hidden = true; }
+    window.addEventListener("beforeinstallprompt", function (ev) {
+      ev.preventDefault();
+      deferred = ev;
+      text.textContent = "Put Popcorn Sort on your phone.";
+      btn.textContent = "Install";
+      bar.hidden = false;
+    });
+    window.addEventListener("appinstalled", done);
+    var ua = navigator.userAgent || "";
+    var isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (isIOS) {
+      text.textContent = "Put Popcorn Sort on your phone: tap the Share button, then Add to Home Screen.";
+      btn.textContent = "Got it";
+      setTimeout(function () { bar.hidden = false; }, 1500);
+    }
+    btn.addEventListener("click", function () {
+      if (!deferred) { done(); return; }
+      deferred.prompt();
+      deferred.userChoice.then(function (choice) {
+        deferred = null;
+        if (choice && choice.outcome === "accepted") done();
+        else bar.hidden = true;
+      });
+    });
+    document.getElementById("installX").addEventListener("click", function () { bar.hidden = true; });
+  })();
 
   // ---------- start ----------
   updateHud();
