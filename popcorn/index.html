@@ -7,7 +7,7 @@
 <title>Wooden Crate Popcorn Sort</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Stardos+Stencil:wght@700&family=Montserrat:wght@500&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Stardos+Stencil:wght@700&family=Montserrat:wght@500&family=Nunito:wght@600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 :root {
   /* Layout: one screen. Black name bar, pale wood title plaque, cups on barnwood (or the unlocked flavor's photo), wood buttons, espresso footer. */
@@ -144,7 +144,7 @@ h1 {
 }
 .controls {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   padding: 8px 16px 8px;
   max-width: 560px;
@@ -220,6 +220,77 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
   border-color: #000;
   font-size: 17px;
 }
+
+/* Arcade leaderboard */
+.arcade {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.95);
+  color: var(--cream);
+  font-family: "Press Start 2P", "Courier New", monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+.arcade[hidden] { display: none; }
+#hs { justify-content: center; padding: 20px 16px; }
+.a-box { width: 100%; max-width: 380px; text-align: center; display: flex; flex-direction: column; gap: 16px; align-items: center; }
+.a-box > div { width: 100%; display: flex; flex-direction: column; gap: 16px; align-items: center; }
+.a-box > div[hidden] { display: none; }
+.a-title {
+  margin: 0;
+  font-size: clamp(20px, 6.4vw, 28px);
+  line-height: 1.3;
+  color: var(--butter);
+  text-shadow: 3px 3px 0 #b3371f;
+  text-transform: uppercase;
+}
+.a-sub, .a-note, .a-err, .a-you { margin: 0; font-size: 12px; line-height: 1.6; }
+.a-note { color: #7fd0ff; text-transform: uppercase; }
+.a-err { color: #ff8f7a; }
+.a-err[hidden] { display: none; }
+.a-slots { display: flex; flex-direction: row; gap: 12px; justify-content: center; }
+.a-slot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.a-letter {
+  width: 64px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: #fff;
+  border: 3px solid var(--butter);
+  border-radius: 4px;
+  background: #1a120a;
+}
+.arcade button {
+  font-family: inherit;
+  font-weight: 400;
+  color: var(--cream);
+  background: #1a120a;
+  border: 3px solid var(--cream);
+  border-radius: 4px;
+}
+.arcade button:active { background: #3a2a1a; transform: translateY(1px); }
+.a-arrow { width: 64px; min-height: 44px; font-size: 16px; }
+.arcade .a-btn { font-size: 14px; min-height: 50px; padding: 10px 22px; color: #000; background: var(--butter); border-color: var(--butter); text-transform: uppercase; }
+.arcade .a-btn:disabled { opacity: 0.5; }
+.arcade .a-link { border: 0; background: none; font-size: 11px; text-decoration: underline; min-height: 40px; }
+.a-link[hidden] { display: none; }
+.a-list { list-style: none; margin: 0; padding: 0; width: 100%; max-width: 300px; font-size: 15px; font-variant-numeric: tabular-nums; }
+.a-list li { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 8px; padding: 7px 6px; text-align: left; }
+.a-list li span:last-child { text-align: right; }
+.a-list li.me { color: #000; background: var(--butter); }
+.a-list li.empty { color: #6d6253; }
+.a-head { width: 100%; max-width: 460px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 12px; }
+.arcade .a-head .a-btn { font-size: 11px; min-height: 44px; padding: 8px 12px; }
+.a-scroll { flex: 1 1 auto; min-height: 0; width: 100%; max-width: 460px; overflow-y: auto; padding: 0 16px 24px; -webkit-overflow-scrolling: touch; }
+.a-level { border-top: 3px dashed #4a3b2a; padding: 16px 0 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.a-level h3 { margin: 0; font-size: 14px; font-weight: 400; color: #7fd0ff; text-transform: uppercase; }
+.a-you { color: var(--butter); }
+.a-msg { margin: 0; padding: 18px 0; font-size: 12px; line-height: 1.7; text-align: center; }
 
 /* New flavor reveal */
 #unlock {
@@ -327,8 +398,7 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
 <div class="controls">
   <button id="undo" type="button">Undo</button>
   <button id="restart" type="button">Restart</button>
-  <button id="addcup" type="button">Add cup</button>
-  <button id="newmix" type="button">New mix</button>
+  <button id="scoresBtn" type="button">Scores</button>
 </div>
 <p class="shop"><span>Unique creations for unique occasions.</span>Shop at <a href="https://woodencratepopcorn.com/" target="_blank" rel="noopener">woodencratepopcorn.com</a></p>
 
@@ -343,6 +413,36 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
     <p class="u-name" id="uName"></p>
     <button class="u-btn" id="uPlay" type="button">Play</button>
   </div>
+</div>
+
+<div id="hs" class="arcade" hidden>
+  <div class="a-box">
+    <p class="a-title">High Score!</p>
+    <p class="a-sub" id="hsSub"></p>
+    <div id="hsEntry">
+      <p class="a-note">Enter your initials</p>
+      <div class="a-slots">
+        <div class="a-slot"><button type="button" class="a-arrow" data-i="0" data-d="1" aria-label="First letter, next">&#9650;</button><span class="a-letter" id="hsL0">A</span><button type="button" class="a-arrow" data-i="0" data-d="-1" aria-label="First letter, back">&#9660;</button></div>
+        <div class="a-slot"><button type="button" class="a-arrow" data-i="1" data-d="1" aria-label="Second letter, next">&#9650;</button><span class="a-letter" id="hsL1">A</span><button type="button" class="a-arrow" data-i="1" data-d="-1" aria-label="Second letter, back">&#9660;</button></div>
+        <div class="a-slot"><button type="button" class="a-arrow" data-i="2" data-d="1" aria-label="Third letter, next">&#9650;</button><span class="a-letter" id="hsL2">A</span><button type="button" class="a-arrow" data-i="2" data-d="-1" aria-label="Third letter, back">&#9660;</button></div>
+      </div>
+      <button type="button" class="a-btn" id="hsSave">Save</button>
+      <p class="a-err" id="hsErr" hidden></p>
+      <button type="button" class="a-link" id="hsSkip" hidden>Skip it</button>
+    </div>
+    <div id="hsBoard" hidden>
+      <ol class="a-list" id="hsList"></ol>
+      <button type="button" class="a-btn" id="hsGo">Keep going</button>
+    </div>
+  </div>
+</div>
+
+<div id="scores" class="arcade" hidden>
+  <div class="a-head">
+    <p class="a-title">High Scores</p>
+    <button type="button" class="a-btn" id="scClose">Close</button>
+  </div>
+  <div class="a-scroll" id="scList"></div>
 </div>
 
 <script>
@@ -372,8 +472,7 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
   var elFlavorName = document.getElementById("flavorName");
   var btnUndo = document.getElementById("undo");
   var btnRestart = document.getElementById("restart");
-  var btnAdd = document.getElementById("addcup");
-  var btnNew = document.getElementById("newmix");
+  var btnScores = document.getElementById("scoresBtn");
   var btnNext = document.getElementById("next");
   var elUnlock = document.getElementById("unlock");
   var elStage1 = document.getElementById("uStage1");
@@ -408,6 +507,19 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
     }
   })();
   function saveLevel() { store("popcornSortLevel", String(level)); }
+
+  // This phone's own record: best moves per level, initials, and a random id so
+  // the leaderboard can tell one phone's scores from another's.
+  var best = {};
+  try { best = JSON.parse(store("popcornSortBest")) || {}; } catch (e) { best = {}; }
+  var initials = (store("popcornSortInitials") || "AAA").toUpperCase().replace(/[^A-Z]/g, "A").slice(0, 3);
+  while (initials.length < 3) initials += "A";
+  var device = store("popcornSortDevice");
+  if (!device || !/^[a-z0-9]{12,40}$/.test(device)) {
+    device = "";
+    for (var di = 0; di < 20; di++) device += "abcdefghijklmnopqrstuvwxyz0123456789".charAt(Math.floor(Math.random() * 36));
+    store("popcornSortDevice", device);
+  }
 
   // Levels 1-10 have no flavor yet. Each ten after that gets the next one.
   function flavorForLevel(lv) {
@@ -466,9 +578,10 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
 
   function flavorCount(lv) { return Math.min(3 + Math.floor((lv - 1) / 2), COLORS.length); }
 
-  function shuffle(a) {
+  function shuffle(a, rand) {
+    rand = rand || Math.random;
     for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
+      var j = Math.floor(rand() * (i + 1));
       var t = a[i]; a[i] = a[j]; a[j] = t;
     }
     return a;
@@ -530,27 +643,30 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
     return rec(start, 0);
   }
 
-  function makeMix(nc) {
-    var best = null;
-    for (var attempt = 0; attempt < 25; attempt++) {
+  // Every player gets the same mix on the same level, so the leaderboard is fair.
+  // Only mixes the solver has actually finished are used, so every level can be beaten.
+  var PUZZLE_SET = 1;
+  function makeMix(lv) {
+    var nc = flavorCount(lv);
+    var last = null;
+    for (var attempt = 0; attempt < 400; attempt++) {
+      var rand = rng(PUZZLE_SET * 1000003 + lv * 7919 + attempt * 104729);
       var pool = [];
       for (var c = 0; c < nc; c++) for (var k = 0; k < CAP; k++) pool.push(c);
-      shuffle(pool);
+      shuffle(pool, rand);
       var t = [];
       for (var i = 0; i < nc; i++) t.push(pool.slice(i * CAP, i * CAP + CAP));
       t.push([]); t.push([]);
-      var anyDone = t.some(isComplete);
-      best = t;
-      if (!anyDone && solvable(t)) return t;
+      last = t;
+      if (!t.some(isComplete) && solvable(t)) return t;
     }
-    return best;
+    return last;
   }
 
   function clone(t) { return t.map(function (a) { return a.slice(); }); }
 
   function newGame(freshMix) {
-    var nc = flavorCount(level);
-    if (freshMix || !startTubes.length) startTubes = makeMix(nc);
+    if (freshMix || !startTubes.length) startTubes = makeMix(level);
     tubes = clone(startTubes);
     moves = 0;
     history = [];
@@ -595,7 +711,6 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
     elFlavors.textContent = flavorCount(level);
     elMoves.textContent = moves;
     btnUndo.disabled = !history.length || won;
-    btnAdd.disabled = extraUsed || won;
   }
   function setStatus(s) { elStatus.textContent = s; }
 
@@ -972,22 +1087,32 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
   function afterMove() {
     if (allDone(tubes)) {
       won = true;
-      var finished = level;
+      var finished = level, m = moves;
       level++;
       saveLevel();
+      if (!best[finished] || m < best[finished]) {
+        best[finished] = m;
+        store("popcornSortBest", JSON.stringify(best));
+      }
       btnUndo.disabled = true;
-      btnAdd.disabled = true;
       setStatus("Every color is in its own cup.");
-      if (finished % UNLOCK_EVERY === 0) { showUnlock(); return; }
-      elWinText.textContent = "Level " + finished + " took you " + moves + (moves === 1 ? " move." : " moves.");
-      elWin.hidden = false;
-      btnNext.focus();
+      api("POST", { action: "check", level: finished, moves: m, device: device }).then(function (j) {
+        if (j && j.qualifies) showInitials(finished, m);
+        else continueAfterWin(finished, m);
+      });
       return;
     }
     var last = history.length ? lastFinished() : null;
     if (last !== null) setStatus(COLORS[last].name + " is sorted. Nice.");
-    else if (!hasMoves()) setStatus(extraUsed ? "No moves left. Try Undo or Restart." : "No moves left. Try Undo or Add cup.");
+    else if (!hasMoves()) setStatus("No moves left. Try Undo or Restart.");
     else setStatus("Keep going. Match the top colors.");
+  }
+
+  function continueAfterWin(finished, m) {
+    if (finished % UNLOCK_EVERY === 0) { showUnlock(); return; }
+    elWinText.textContent = "Level " + finished + " took you " + m + (m === 1 ? " move." : " moves.");
+    elWin.hidden = false;
+    btnNext.focus();
   }
 
   function lastFinished() {
@@ -1034,7 +1159,8 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
   });
 
   document.addEventListener("keydown", function (ev) {
-    if (!elUnlock.hidden) return;
+    if (!elHs.hidden) { typeInitial(ev); return; }
+    if (!elUnlock.hidden || !elScores.hidden) return;
     if (ev.target && ev.target.tagName === "BUTTON") return;
     if (ev.key >= "0" && ev.key <= "9") {
       var n = ev.key === "0" ? 9 : parseInt(ev.key, 10) - 1;
@@ -1055,19 +1181,178 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
     kick();
   });
   btnRestart.addEventListener("click", function () { if (!won) newGame(false); });
-  btnNew.addEventListener("click", function () { if (!won) newGame(true); });
-  btnAdd.addEventListener("click", function () {
-    if (extraUsed || won || flying.length) return;
-    history.push({ tubes: clone(tubes), moves: moves, extraUsed: extraUsed });
-    tubes.push([]);
-    extraUsed = true;
-    sel = -1;
-    setStatus("One extra cup. You get one per level.");
-    updateHud();
-    layout();
-    kick();
-  });
   btnNext.addEventListener("click", function () { newGame(true); });
+
+  // ---------- leaderboard ----------
+  var API = "/.netlify/functions/popcorn-scores";
+  var elHs = document.getElementById("hs");
+  var elHsSub = document.getElementById("hsSub");
+  var elHsEntry = document.getElementById("hsEntry");
+  var elHsBoard = document.getElementById("hsBoard");
+  var elHsList = document.getElementById("hsList");
+  var elHsErr = document.getElementById("hsErr");
+  var btnHsSave = document.getElementById("hsSave");
+  var btnHsSkip = document.getElementById("hsSkip");
+  var btnHsGo = document.getElementById("hsGo");
+  var elScores = document.getElementById("scores");
+  var elScList = document.getElementById("scList");
+  var hsLetters = [0, 1, 2].map(function (i) { return document.getElementById("hsL" + i); });
+  var hsPending = null;
+  var hsCursor = 0;
+
+  // Talks to the shared leaderboard. Returns null if it can't be reached, and the game carries on.
+  function api(method, payload) {
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 7000);
+    var url = API, opts = { method: method };
+    if (ctl) opts.signal = ctl.signal;
+    if (method === "GET") url += "?levels=" + payload.join(",");
+    else { opts.headers = { "Content-Type": "application/json" }; opts.body = JSON.stringify(payload); }
+    return fetch(url, opts).then(function (r) {
+      if (!r.ok) throw new Error("bad");
+      return r.json();
+    }).then(function (j) {
+      clearTimeout(timer);
+      return j && j.ok ? j : null;
+    }).catch(function () {
+      clearTimeout(timer);
+      return null;
+    });
+  }
+
+  function boardRows(listEl, board, mine) {
+    listEl.textContent = "";
+    var marked = false;
+    for (var i = 0; i < 5; i++) {
+      var e = board && board[i];
+      var li = document.createElement("li");
+      var cells = [(i + 1) + ".", e ? e.n : "---", e ? String(e.m) : "--"];
+      for (var c = 0; c < 3; c++) {
+        var sp = document.createElement("span");
+        sp.textContent = cells[c];
+        li.appendChild(sp);
+      }
+      if (!e) li.className = "empty";
+      else if (mine && !marked && e.n === mine.n && e.m === mine.m) { li.className = "me"; marked = true; }
+      listEl.appendChild(li);
+    }
+  }
+
+  function showInitials(finished, m) {
+    hsPending = { level: finished, moves: m };
+    hsCursor = 0;
+    for (var i = 0; i < 3; i++) hsLetters[i].textContent = initials.charAt(i);
+    elHsSub.textContent = "Level " + finished + " in " + m + " moves. You made the top 5!";
+    elHsErr.hidden = true;
+    btnHsSkip.hidden = true;
+    btnHsSave.disabled = false;
+    elHsEntry.hidden = false;
+    elHsBoard.hidden = true;
+    elHs.hidden = false;
+    btnHsSave.focus();
+  }
+
+  function spin(i, d) {
+    var code = hsLetters[i].textContent.charCodeAt(0) - 65;
+    hsLetters[i].textContent = String.fromCharCode(65 + (code + d + 26) % 26);
+  }
+  elHs.addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (t && t.classList && t.classList.contains("a-arrow")) spin(parseInt(t.getAttribute("data-i"), 10), parseInt(t.getAttribute("data-d"), 10));
+  });
+  function typeInitial(ev) {
+    if (elHsEntry.hidden || !/^[a-zA-Z]$/.test(ev.key)) return;
+    hsLetters[hsCursor].textContent = ev.key.toUpperCase();
+    hsCursor = (hsCursor + 1) % 3;
+  }
+
+  btnHsSave.addEventListener("click", function () {
+    if (!hsPending) return;
+    initials = hsLetters.map(function (el) { return el.textContent; }).join("");
+    store("popcornSortInitials", initials);
+    btnHsSave.disabled = true;
+    elHsErr.hidden = true;
+    var p = hsPending;
+    api("POST", { action: "submit", level: p.level, moves: p.moves, device: device, initials: initials }).then(function (j) {
+      btnHsSave.disabled = false;
+      if (!j) {
+        elHsErr.textContent = "Couldn't save it. Check your signal and try again.";
+        elHsErr.hidden = false;
+        btnHsSkip.hidden = false;
+        return;
+      }
+      if (j.rejected) {
+        elHsErr.textContent = "Pick different initials.";
+        elHsErr.hidden = false;
+        return;
+      }
+      boardRows(elHsList, j.board, { n: initials, m: p.moves });
+      elHsEntry.hidden = true;
+      elHsBoard.hidden = false;
+      btnHsGo.focus();
+    });
+  });
+  function closeHs() {
+    var p = hsPending;
+    hsPending = null;
+    elHs.hidden = true;
+    if (p) continueAfterWin(p.level, p.moves);
+  }
+  btnHsSkip.addEventListener("click", closeHs);
+  btnHsGo.addEventListener("click", closeHs);
+
+  // Scores button: every level this phone has finished, newest first.
+  function openScores() {
+    var levels = Object.keys(best).map(Number).filter(function (n) { return n > 0; }).sort(function (a, b) { return b - a; });
+    elScList.textContent = "";
+    elScores.hidden = false;
+    if (!levels.length) {
+      var none = document.createElement("p");
+      none.className = "a-msg";
+      none.textContent = "Finish a level and your scores show up here.";
+      elScList.appendChild(none);
+      return;
+    }
+    var note = document.createElement("p");
+    note.className = "a-msg";
+    note.textContent = "Loading...";
+    elScList.appendChild(note);
+    var lists = {};
+    levels.forEach(function (lv) {
+      var sec = document.createElement("section");
+      sec.className = "a-level";
+      var h = document.createElement("h3");
+      h.textContent = "Level " + lv;
+      var ol = document.createElement("ol");
+      ol.className = "a-list";
+      boardRows(ol, null, null);
+      var you = document.createElement("p");
+      you.className = "a-you";
+      you.textContent = "Your moves: " + best[lv];
+      sec.appendChild(h); sec.appendChild(ol); sec.appendChild(you);
+      elScList.appendChild(sec);
+      lists[lv] = ol;
+    });
+    var chunks = [];
+    for (var i = 0; i < levels.length; i += 50) chunks.push(levels.slice(i, i + 50));
+    var failed = false;
+    chunks.reduce(function (chain, chunk) {
+      return chain.then(function () {
+        if (elScores.hidden) return null;
+        return api("GET", chunk).then(function (j) {
+          if (!j) { failed = true; return; }
+          chunk.forEach(function (lv) {
+            boardRows(lists[lv], j.boards[lv] || [], { n: initials, m: best[lv] });
+          });
+        });
+      });
+    }, Promise.resolve()).then(function () {
+      if (failed) note.textContent = "Can't reach the leaderboard right now. Your own scores are below.";
+      else note.remove();
+    });
+  }
+  btnScores.addEventListener("click", openScores);
+  document.getElementById("scClose").addEventListener("click", function () { elScores.hidden = true; });
 
   // ---------- new flavor reveal ----------
   var bits = [];        // flavor popcorn flying around the screen

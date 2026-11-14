@@ -1,0 +1,9 @@
+{
+  "name": "40th-floor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "40thFloor.com hub site. Dependencies here are for the Netlify functions in netlify/functions.",
+  "dependencies": {
+    "@netlify/blobs": "^10.7.0"
+  }
+}
