@@ -1206,7 +1206,7 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
     }
     var last = history.length ? lastFinished() : null;
     if (last !== null) setStatus(COLORS[last].name + " is sorted. Nice.");
-    else if (!hasMoves()) showStuck();
+    else if (deadEnd()) showStuck();
     else setStatus("Keep going. Match the top colors.");
   }
 
@@ -1221,6 +1221,40 @@ button:focus-visible { outline: 3px solid var(--butter); outline-offset: 2px; }
   // Checked after every move. When nothing useful can be poured, a sign pops up.
   // Tapping it scrambles the cups that aren't finished. Finished cups stay put.
   var elStuck = document.getElementById("stuck");
+
+  // Stuck means either nothing can be poured at all, or the only pours left just go
+  // in circles (like moving one piece back and forth) and can never finish the level.
+  // It looks ahead through every board the player could still reach. If there are only
+  // a few of them and none is a win, the level is a dead end.
+  var DEAD_END_LIMIT = 60;
+  function deadEnd() {
+    if (!hasMoves()) return true;
+    function key(t) { return t.map(function (a) { return a.join(""); }).sort().join("|"); }
+    var queue = [clone(tubes)];
+    var seen = new Set([key(tubes)]);
+    while (queue.length) {
+      var t = queue.shift();
+      if (allDone(t)) return false;
+      for (var i = 0; i < t.length; i++) {
+        var a = t[i];
+        if (!a.length || isComplete(a)) continue;
+        var run = topRun(a);
+        for (var j = 0; j < t.length; j++) {
+          if (i === j || !canPour(a, t[j])) continue;
+          if (t[j].length === 0 && run === a.length) continue;
+          var n = Math.min(run, CAP - t[j].length);
+          var nt = clone(t);
+          for (var m = 0; m < n; m++) nt[j].push(nt[i].pop());
+          var k = key(nt);
+          if (seen.has(k)) continue;
+          seen.add(k);
+          if (seen.size > DEAD_END_LIMIT) return false;   // still plenty of game left
+          queue.push(nt);
+        }
+      }
+    }
+    return true;
+  }
   function showStuck() {
     setStatus("No more moves.");
     elStuck.hidden = false;
